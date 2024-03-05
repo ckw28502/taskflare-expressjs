@@ -1,0 +1,8 @@
+*.pem
+*.jade
+*.txt
+package.json
+package-lock.json
+Dockerfile
+*.yml
+*.css
