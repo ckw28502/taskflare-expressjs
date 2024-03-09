@@ -10,7 +10,7 @@ module.exports = {
       env: {
         node: true
       },
-      files: [".js"],
+      files: [".eslintrc.{js,cjs}"],
       parserOptions: {
         sourceType: "script"
       }
@@ -21,6 +21,7 @@ module.exports = {
   },
   rules: {
     quotes: ["error", "double"],
-    semi: ["error", "always"]
+    semi: ["error", "always"],
+    "space-before-function-paren": ["error", "never"]
   }
 };
