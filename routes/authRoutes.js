@@ -21,11 +21,7 @@ router.post("/login", loginRequestSchema(), noTokenValidation, requestBodyValida
 router.post("/register", registerRequestSchema(), noTokenValidation, requestBodyValidation, async(req, res) => {
   const request = new RegisterRequest(req.body);
   const response = await registerService(request);
-  if (response) {
-    res.status(response.errorProtocol).json({ message: response.errorCode });
-  } else {
-    res.sendStatus(201);
-  }
+  res.status(response.code).json({ message: response.message });
 });
 
 module.exports = router;

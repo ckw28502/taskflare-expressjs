@@ -1,32 +1,30 @@
 const UserModel = require("../../models/userModel");
 
-async function register(request) {
-  try {
-    const isUserExists = await UserModel.exists({ email: request.getEmail() });
-    if (isUserExists) {
-      return {
-        errorProtocol: 400,
-        errorCode: "EMAIL_EXISTS"
-      };
-    }
-    if (request.getPassword() !== request.getConfirmationPassword()) {
-      return {
-        errorProtocol: 400,
-        errorCode: "PASSWORD_MISSMATCH"
-      };
-    }
+const { hash } = require("../../security/bcyrpt");
 
-    await UserModel.create({
-      email: request.getEmail(),
-      password: request.getPassword()
-    });
-  } catch (error) {
-    console.log("error: " + error);
+async function register(request) {
+  const isUserExists = await UserModel.exists({ email: request.getEmail() });
+  if (isUserExists) {
     return {
-      errorProtocol: 500,
-      errorCode: error
+      code: 400,
+      message: "EMAIL_EXISTS"
     };
   }
+  if (request.getPassword() !== request.getConfirmationPassword()) {
+    return {
+      code: 400,
+      message: "PASSWORD_MISSMATCH"
+    };
+  }
+  const hashedPassword = hash(request.getPassword());
+  await UserModel.create({
+    email: request.getEmail(),
+    password: hashedPassword
+  });
+  return {
+    code: 201,
+    message: "USER_CREATED"
+  };
 }
 
 module.exports = register;

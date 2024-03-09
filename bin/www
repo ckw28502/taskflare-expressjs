@@ -34,7 +34,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const server = http.createServer(app);
 
-
 /**
  * Listen on provided port, on all network interfaces.
  */
