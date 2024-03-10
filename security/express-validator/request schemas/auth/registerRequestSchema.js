@@ -3,10 +3,10 @@ const { body } = require("express-validator");
 function getRegisterRequestSchema(req) {
   return [
     body("email")
-      .notEmpty().withMessage("Email address is required!")
-      .isEmail().withMessage("Invalid email provided!"),
-    body("password").notEmpty().withMessage("Password is required!"),
-    body("confirmationPassword").notEmpty().withMessage("Confirmation password is required!")
+      .notEmpty().withMessage("EMAIL_REQUIRED")
+      .isEmail().withMessage("EMAIL_INVALID"),
+    body("password").notEmpty().withMessage("PASSWORD_REQUIRED"),
+    body("confirmationPassword").notEmpty().withMessage("CONFIRMATION_PASSWORD_REQUIRED")
   ];
 }
 
