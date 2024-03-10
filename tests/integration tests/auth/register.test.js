@@ -1,10 +1,15 @@
 const request = require("supertest");
 const app = require("../../../app");
 
-const registerService = require("../../../services/auth/registerService");
+const register = require("../../../services/auth/registerService");
 jest.mock("../../../services/auth/registerService");
 
-describe("Authentication routes integration tests", () => {
+const log = require("../../../services/logService");
+jest.mock("../../../services/logService", () => {
+  return jest.fn();
+});
+
+describe("authentication routes integration tests", () => {
   test("should return 403 if request has authorization token", async() => {
     const response = await request(app)
       .post("/register")
@@ -40,7 +45,8 @@ describe("Authentication routes integration tests", () => {
       code: 201,
       message: "USER_CREATED"
     };
-    registerService.mockResolvedValue(responseBody);
+
+    register.mockResolvedValue(responseBody);
     const response = await request(app)
       .post("/register")
       .send({
@@ -50,6 +56,7 @@ describe("Authentication routes integration tests", () => {
       });
 
     expect(response.status).toEqual(responseBody.code);
-    expect(response.body).toEqual({message: responseBody.message});
+    expect(response.body).toEqual({ message: responseBody.message });
+    expect(log).toHaveBeenCalled();
   });
 });

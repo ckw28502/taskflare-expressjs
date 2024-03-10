@@ -1,17 +1,14 @@
-const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
+const db = require("../db");
 const UserModel = require("../../../models/userModel");
 const RegisterRequest = require("../../../dto/requests/auth/registerRequest");
 
 const registerService = require("../../../services/auth/registerService");
 
-let mongoServer;
 let request;
 
 beforeAll(async() => {
-  mongoServer = await MongoMemoryServer.create();
-  const mongoUri = await mongoServer.getUri();
-  await mongoose.connect(mongoUri);
+  await db.setUp();
+
   request = new RegisterRequest({
     email: "user@gmail.com",
     password: "user",
@@ -20,15 +17,14 @@ beforeAll(async() => {
 });
 
 afterAll(async() => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
+  await db.tearDown();
 });
 
 function mockUserExists(value) {
   jest.spyOn(UserModel, "exists").mockReturnValue(value);
 }
 
-describe("Register", () => {
+describe("register service unit tests", () => {
   it("should return 400 when email already registered!", async() => {
     mockUserExists(true);
     const response = await registerService(request);
@@ -59,10 +55,10 @@ describe("Register", () => {
   it("should create new user object", async() => {
     mockUserExists(null);
 
-    const saveUser = jest.spyOn(UserModel, "create");
+    const createUserSpy = jest.spyOn(UserModel, "create");
 
     await registerService(request);
 
-    expect(saveUser).toHaveBeenCalled();
+    expect(createUserSpy).toHaveBeenCalled();
   });
 });

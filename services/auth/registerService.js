@@ -17,11 +17,12 @@ async function register(request) {
     };
   }
   const hashedPassword = hash(request.getPassword());
-  await UserModel.create({
+  const user = await UserModel.create({
     email: request.getEmail(),
     password: hashedPassword
   });
   return {
+    user,
     code: 201,
     message: "USER_CREATED"
   };
