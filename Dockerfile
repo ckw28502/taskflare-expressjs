@@ -17,10 +17,10 @@ COPY . .
 COPY .env ./.env
 
 # Expose port 3000
-EXPOSE 443
+EXPOSE 3000
 
 # Set NODE_ENV to production
 ENV NODE_ENV=production
 
 # Command to run the application
-CMD ["npm", "run", "dev"]
+CMD ["node", "bin/www"]
