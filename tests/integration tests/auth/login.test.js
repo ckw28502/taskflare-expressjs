@@ -1,17 +1,17 @@
 const request = require("supertest");
 const app = require("../../../app");
 
-const register = require("../../../services/auth/registerService");
-jest.mock("../../../services/auth/registerService");
+const login = require("../../../services/auth/loginService");
+jest.mock("../../../services/auth/loginService");
 
 const log = require("../../../services/logService");
 const UserModel = require("../../../models/userModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
-describe("register integration tests", () => {
+describe("login integration tests", () => {
   test("should return 403 if request has authorization token", async() => {
     const response = await request(app)
-      .post("/register")
+      .post("/login")
       .set("Authorization", "Bearer jwt");
 
     expect(response.status).toEqual(403);
@@ -24,16 +24,12 @@ describe("register integration tests", () => {
     },
     {
       email: "user@gmail.com"
-    },
-    {
-      email: "user@gmail.com",
-      password: "user"
     }
   ];
 
   test.each(requestBodies)("should return 400 when request body schema is invalid!", async(requestBody) => {
     const response = await request(app)
-      .post("/register")
+      .post("/login")
       .send(requestBody);
 
     expect(response.status).toEqual(400);
@@ -42,25 +38,30 @@ describe("register integration tests", () => {
   test("should return 201 when request is valid", async() => {
     const req = {
       email: "user@gmail.com",
-      password: "user",
-      confirmationPassword: "user"
-    };
-    const responseBody = {
-      code: 201,
-      message: "USER_CREATED",
-      user: new UserModel({
-        email: req.email,
-        password: req.password
-      })
+      password: "user"
     };
 
-    register.mockResolvedValue(responseBody);
+    const responseBody = {
+      code: 200,
+      message: "LOGGED_IN",
+      user: new UserModel(req),
+      token: "token",
+      refreshToken: "refresh token"
+    };
+
+    login.mockResolvedValue(responseBody);
     const response = await request(app)
-      .post("/register")
-      .send(req);
+      .post("/login")
+      .send({
+        email: "user@gmail.com",
+        password: "user"
+      });
 
     expect(response.status).toEqual(responseBody.code);
-    expect(response.body).toEqual({ message: responseBody.message });
+    expect(response.body).toEqual({
+      token: responseBody.token,
+      refreshToken: responseBody.refreshToken
+    });
     expect(log).toHaveBeenCalled();
   });
 });
