@@ -16,7 +16,7 @@ async function register(request) {
       message: "PASSWORD_MISSMATCH"
     };
   }
-  const hashedPassword = hash(request.getPassword());
+  const hashedPassword = await hash(request.getPassword());
   const user = await UserModel.create({
     email: request.getEmail(),
     password: hashedPassword

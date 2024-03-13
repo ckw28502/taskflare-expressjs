@@ -2,8 +2,12 @@ const bcrypt = require("bcrypt");
 
 const salt = 10;
 
-function hash(text) {
-  return bcrypt.hashSync(text, salt);
+async function hash(text) {
+  return await bcrypt.hash(text, salt);
 }
 
-module.exports = { hash };
+async function match(text, hashedText) {
+  return await bcrypt.compare(text, hashedText);
+}
+
+module.exports = { hash, match };

@@ -15,9 +15,26 @@ const register = require("../services/auth/registerService");
 const noTokenValidation = require("../security/passport/noTokenMiddleware");
 const requestBodyValidation = require("../security/express-validator/expressValidator");
 
-router.post("/login", loginRequestSchema(), noTokenValidation, requestBodyValidation, (req, res) => {
+router.post("/login", loginRequestSchema(), noTokenValidation, requestBodyValidation, async(req, res) => {
   const request = new LoginRequest(req.body);
-  res.json(login(request));
+  const response = await login(request);
+  log({
+    user: response.user,
+    action: "LOGIN",
+    status: response.code,
+    detail: response.message,
+    schema: "USER"
+  });
+  let responseBody;
+  if (response.token) {
+    responseBody = {
+      token: response.token,
+      refreshToken: response.refreshToken
+    };
+  } else {
+    responseBody = response.message;
+  }
+  res.status(response.code).json(responseBody);
 });
 
 router.post("/register", registerRequestSchema(), noTokenValidation, requestBodyValidation, async(req, res) => {
