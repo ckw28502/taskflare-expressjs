@@ -5,9 +5,7 @@ const register = require("../../../services/auth/registerService");
 jest.mock("../../../services/auth/registerService");
 
 const log = require("../../../services/logService");
-jest.mock("../../../services/logService", () => {
-  return jest.fn();
-});
+jest.mock("../../../services/logService", () => jest.fn());
 
 describe("authentication routes integration tests", () => {
   test("should return 403 if request has authorization token", async() => {

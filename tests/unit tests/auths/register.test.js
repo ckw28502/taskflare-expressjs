@@ -2,32 +2,31 @@ const db = require("../db");
 const UserModel = require("../../../models/userModel");
 const RegisterRequest = require("../../../dto/requests/auth/registerRequest");
 
-const registerService = require("../../../services/auth/registerService");
-
-let request;
-
-beforeAll(async() => {
-  await db.setUp();
-
-  request = new RegisterRequest({
-    email: "user@gmail.com",
-    password: "user",
-    confirmationPassword: "user"
-  });
-});
-
-afterAll(async() => {
-  await db.tearDown();
-});
-
-function mockUserExists(value) {
-  jest.spyOn(UserModel, "exists").mockReturnValue(value);
-}
+const register = require("../../../services/auth/registerService");
 
 describe("register service unit tests", () => {
+  let request;
+
+  beforeAll(async() => {
+    await db.setUp();
+
+    request = new RegisterRequest({
+      email: "user@gmail.com",
+      password: "user",
+      confirmationPassword: "user"
+    });
+  });
+
+  afterAll(async() => {
+    await db.tearDown();
+  });
+
+  function mockUserExists(value) {
+    jest.spyOn(UserModel, "exists").mockReturnValue(value);
+  }
   it("should return 400 when email already registered!", async() => {
     mockUserExists(true);
-    const response = await registerService(request);
+    const response = await register(request);
 
     expect(response).toEqual({
       code: 400,
@@ -44,7 +43,7 @@ describe("register service unit tests", () => {
       confirmationPassword: "useer"
     });
 
-    const response = await registerService(currentRequest);
+    const response = await register(currentRequest);
 
     expect(response).toEqual({
       code: 400,
@@ -57,7 +56,7 @@ describe("register service unit tests", () => {
 
     const createUserSpy = jest.spyOn(UserModel, "create");
 
-    await registerService(request);
+    await register(request);
 
     expect(createUserSpy).toHaveBeenCalled();
   });

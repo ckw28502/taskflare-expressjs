@@ -1,9 +1,9 @@
-const User = require("../../models/userModel");
+const UserModel = require("../../models/userModel");
 const { match } = require("../../security/bcyrpt");
 const { generateToken, generateRefreshToken } = require("../../security/jwt");
 
 async function login(request) {
-  const user = await User.findOne({ email: request.getEmail() });
+  const user = await UserModel.findOne({ email: request.getEmail() });
   if (!user) {
     return {
       code: 400,
