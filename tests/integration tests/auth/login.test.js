@@ -5,7 +5,7 @@ const login = require("../../../services/auth/loginService");
 jest.mock("../../../services/auth/loginService");
 
 const log = require("../../../services/logService");
-const UserModel = require("../../../models/userModel");
+const UserModel = require("../../../models/UserModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("login integration tests", () => {

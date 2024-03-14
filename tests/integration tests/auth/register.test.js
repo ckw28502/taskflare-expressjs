@@ -5,7 +5,7 @@ const register = require("../../../services/auth/registerService");
 jest.mock("../../../services/auth/registerService");
 
 const log = require("../../../services/logService");
-const UserModel = require("../../../models/userModel");
+const UserModel = require("../../../models/UserModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("register integration tests", () => {

@@ -1,4 +1,4 @@
-const UserModel = require("../../models/userModel");
+const UserModel = require("../../models/UserModel");
 const { match } = require("../../security/bcyrpt");
 const { generateToken, generateRefreshToken } = require("../../security/jwt");
 
@@ -20,8 +20,8 @@ async function login(request) {
 
   return {
     code: 200,
-    token: generateToken(request.getEmail()),
-    refreshToken: generateRefreshToken(request.getEmail()),
+    token: generateToken(user._id),
+    refreshToken: generateRefreshToken(user._id),
     message: "LOGGED_IN",
     user
   };

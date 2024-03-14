@@ -10,7 +10,7 @@ const logSchema = Schema({
   },
   schema: {
     type: String,
-    required: true
+    default: null
   },
   action: {
     type: String,

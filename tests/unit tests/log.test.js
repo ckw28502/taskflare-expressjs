@@ -16,13 +16,13 @@ describe("Log service unit tests", () => {
   it("should create a new log", async() => {
     const createLogSpy = jest.spyOn(LogModel, "create");
 
-    await log({
-      user: null,
-      action: "TEST",
-      status: 0,
-      detail: "TEST_SUCCEED",
-      schema: "LOG"
-    });
+    await log(
+      null,
+      "TEST",
+      0,
+      "TEST_SUCCEED",
+      "LOG"
+    );
 
     expect(createLogSpy).toHaveBeenCalled();
   });

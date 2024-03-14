@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 
-function validate(req, res, next) {
+function validateNotEmpty(req, res, next) {
   const result = validationResult(req);
   if (!result.isEmpty()) {
     return res.status(400).json({ message: result.errors[0].msg });
@@ -8,4 +8,11 @@ function validate(req, res, next) {
   next();
 }
 
-module.exports = validate;
+function validateEmpty(req, res, next) {
+  if (Object.keys(req.body).length > 0) {
+    return res.status(400).json({ message: "REQUEST_NOT_EMPTY" });
+  }
+  next();
+}
+
+module.exports = { validateNotEmpty, validateEmpty };

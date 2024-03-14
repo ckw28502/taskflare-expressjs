@@ -1,5 +1,5 @@
 const db = require("../db");
-const UserModel = require("../../../models/userModel");
+const UserModel = require("../../../models/UserModel");
 
 const LoginRequest = require("../../../dto/requests/auth/loginRequest");
 
