@@ -10,7 +10,7 @@ function generateRefreshToken(id) {
 }
 
 function decodeToken(token) {
-  return jwt.decode(token, { complete: true }).payload;
+  return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 }
 
 module.exports = {
