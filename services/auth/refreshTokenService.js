@@ -1,8 +1,8 @@
 const UserModel = require("../../models/UserModel");
-const { generateToken, decodeToken } = require("../../security/jwt");
+const { generateToken, decodeRefreshToken } = require("../../security/jwt");
 
 async function refreshToken(token) {
-  const decodedToken = decodeToken(token);
+  const decodedToken = decodeRefreshToken(token);
   if (!decodedToken) {
     return {
       code: 401,

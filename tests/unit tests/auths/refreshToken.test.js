@@ -3,10 +3,10 @@ const UserModel = require("../../../models/UserModel");
 
 const refreshToken = require("../../../services/auth/refreshTokenService");
 
-const { decodeToken, generateToken } = require("../../../security/jwt");
+const { decodeRefreshToken, generateToken } = require("../../../security/jwt");
 jest.mock("../../../security/jwt", () => {
   return {
-    decodeToken: jest.fn(),
+    decodeRefreshToken: jest.fn(),
     generateToken: jest.fn()
   };
 });
@@ -36,7 +36,7 @@ describe("refresh token unit tests", () => {
   }
 
   it("should return 401 if refresh token is invalid", async() => {
-    decodeToken.mockReturnValue(null);
+    decodeRefreshToken.mockReturnValue(null);
 
     const response = await refreshToken(token);
 
@@ -45,7 +45,7 @@ describe("refresh token unit tests", () => {
   });
 
   it("should return 401 if refresh token payload is invalid", async() => {
-    decodeToken.mockReturnValue({ id: 1 });
+    decodeRefreshToken.mockReturnValue({ id: 1 });
     mockFindById(null);
 
     const response = await refreshToken(token);
@@ -55,7 +55,7 @@ describe("refresh token unit tests", () => {
   });
 
   it("should return 200 token refreshed", async() => {
-    decodeToken.mockReturnValue({ id: 1 });
+    decodeRefreshToken.mockReturnValue({ id: 1 });
     mockFindById(user);
 
     const response = await refreshToken(token);

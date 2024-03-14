@@ -9,12 +9,12 @@ function generateRefreshToken(id) {
   return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET);
 }
 
-function decodeToken(token) {
+function decodeRefreshToken(token) {
   return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 }
 
 module.exports = {
   generateToken,
   generateRefreshToken,
-  decodeToken
+  decodeRefreshToken
 };
