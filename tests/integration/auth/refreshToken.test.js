@@ -3,11 +3,9 @@ const app = require("../../../app");
 
 const UserModel = require("../../../models/UserModel");
 const userData = require("../../data/test-user.json");
-const refreshToken = require("../../../services/auth/refreshTokenService");
 const { generateRefreshToken } = require("../../../security/jwt");
 const log = require("../../../services/logService");
-jest.mock("../../../services/logService",() => jest.fn());
-
+jest.mock("../../../services/logService", () => jest.fn());
 
 describe("refresh token integration test", () => {
   let user;
