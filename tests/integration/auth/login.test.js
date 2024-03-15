@@ -6,10 +6,13 @@ jest.mock("../../../services/auth/loginService");
 
 const log = require("../../../services/logService");
 const UserModel = require("../../../models/UserModel");
+const userData = require("../../data/test-user.json");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("login integration tests", () => {
-  test("should return 403 if request has authorization token", async() => {
+  const requestBody = userData.user;
+
+  it("should return 403 if request has authorization token", async() => {
     const response = await request(app)
       .post("/login")
       .set("Authorization", "Bearer jwt");
@@ -23,28 +26,23 @@ describe("login integration tests", () => {
       email: "user"
     },
     {
-      email: "user@gmail.com"
+      email: requestBody.email
     }
   ];
 
-  test.each(requestBodies)("should return 400 when request body schema is invalid!", async(requestBody) => {
+  it.each(requestBodies)("should return 400 when request body schema is invalid!", async(mockRequestBody) => {
     const response = await request(app)
       .post("/login")
-      .send(requestBody);
+      .send(mockRequestBody);
 
     expect(response.status).toEqual(400);
   });
 
-  test("should return 201 when request is valid", async() => {
-    const req = {
-      email: "user@gmail.com",
-      password: "user"
-    };
-
+  it("should return 201 when request is valid", async() => {
     const responseBody = {
       code: 200,
       message: "LOGGED_IN",
-      user: new UserModel(req),
+      user: new UserModel(requestBody),
       token: "token",
       refreshToken: "refresh token"
     };
@@ -52,10 +50,7 @@ describe("login integration tests", () => {
     login.mockResolvedValue(responseBody);
     const response = await request(app)
       .post("/login")
-      .send({
-        email: "user@gmail.com",
-        password: "user"
-      });
+      .send(requestBody);
 
     expect(response.status).toEqual(responseBody.code);
     expect(response.body).toEqual({

@@ -1,5 +1,6 @@
 const db = require("../db");
 const UserModel = require("../../../models/UserModel");
+const userData = require("../../data/test-user.json");
 
 const refreshToken = require("../../../services/auth/refreshTokenService");
 
@@ -21,10 +22,7 @@ describe("refresh token unit tests", () => {
 
     token = "refresh token";
 
-    user = new UserModel({
-      email: "user@gmail.com",
-      password: "user"
-    });
+    user = new UserModel(userData.user);
   });
 
   afterAll(async() => {

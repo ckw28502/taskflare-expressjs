@@ -8,8 +8,12 @@ const log = require("../../../services/logService");
 const UserModel = require("../../../models/UserModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
+const userData = require("../../data/test-user.json");
+
 describe("register integration tests", () => {
-  test("should return 403 if request has authorization token", async() => {
+  const requestBody = userData.user;
+
+  it("should return 403 if request has authorization token", async() => {
     const response = await request(app)
       .post("/register")
       .set("Authorization", "Bearer jwt");
@@ -23,15 +27,12 @@ describe("register integration tests", () => {
       email: "user"
     },
     {
-      email: "user@gmail.com"
+      email: requestBody.email
     },
-    {
-      email: "user@gmail.com",
-      password: "user"
-    }
+    requestBody
   ];
 
-  test.each(requestBodies)("should return 400 when request body schema is invalid!", async(requestBody) => {
+  it.each(requestBodies)("should return 400 when request body schema is invalid!", async(requestBody) => {
     const response = await request(app)
       .post("/register")
       .send(requestBody);
@@ -39,11 +40,11 @@ describe("register integration tests", () => {
     expect(response.status).toEqual(400);
   });
 
-  test("should return 201 when request is valid", async() => {
+  it("should return 201 when request is valid", async() => {
     const req = {
-      email: "user@gmail.com",
-      password: "user",
-      confirmationPassword: "user"
+      email: requestBody.email,
+      password: requestBody.password,
+      confirmationPassword: requestBody.password
     };
     const responseBody = {
       code: 201,

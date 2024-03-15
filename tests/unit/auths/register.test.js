@@ -1,5 +1,7 @@
 const db = require("../db");
 const UserModel = require("../../../models/UserModel");
+const userData = require("../../data/test-user.json");
+
 const RegisterRequest = require("../../../dto/requests/auth/registerRequest");
 
 const register = require("../../../services/auth/registerService");
@@ -9,11 +11,12 @@ describe("register service unit tests", () => {
 
   beforeAll(async() => {
     await db.setUp();
+    const testUser = userData.user;
 
     request = new RegisterRequest({
-      email: "user@gmail.com",
-      password: "user",
-      confirmationPassword: "user"
+      email: testUser.email,
+      password: testUser.password,
+      confirmationPassword: testUser.password
     });
   });
 
@@ -40,7 +43,7 @@ describe("register service unit tests", () => {
     const currentRequest = new RegisterRequest({
       email: request.getEmail(),
       password: request.getPassword(),
-      confirmationPassword: "useer"
+      confirmationPassword: request.getPassword() + " "
     });
 
     const response = await register(currentRequest);

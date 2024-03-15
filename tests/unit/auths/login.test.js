@@ -1,6 +1,8 @@
 const db = require("../db");
 const UserModel = require("../../../models/UserModel");
 
+const userData = require("../../data/test-user.json");
+
 const LoginRequest = require("../../../dto/requests/auth/loginRequest");
 
 const login = require("../../../services/auth/loginService");
@@ -19,10 +21,7 @@ describe("login unit tests", () => {
   beforeAll(async() => {
     await db.setUp();
 
-    request = new LoginRequest({
-      email: "user@gmail.com",
-      password: "user"
-    });
+    request = new LoginRequest(userData.user);
 
     user = new UserModel({
       email: request.getEmail(),
