@@ -8,6 +8,7 @@ const LoginRequest = require("../../../dto/requests/auth/loginRequest");
 const login = require("../../../services/auth/loginService");
 
 const { match } = require("../../../security/bcyrpt");
+const LoginResponse = require("../../../dto/responses/auths/loginResponse");
 jest.mock("../../../security/bcyrpt", () => {
   return {
     match: jest.fn()
@@ -64,7 +65,7 @@ describe("login unit tests", () => {
 
     expect(response.code).toEqual(200);
     expect(response.message).toEqual("LOGGED_IN");
-    expect(response).toHaveProperty("code");
-    expect(response).toHaveProperty("refreshToken");
+    expect(response.responseBody).toBeInstanceOf(LoginResponse);
+    expect(response.user).toEqual(user);
   });
 });

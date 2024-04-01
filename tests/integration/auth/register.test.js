@@ -29,6 +29,15 @@ describe("register integration tests", () => {
     {
       email: requestBody.email
     },
+    {
+      email: requestBody.email,
+      name: requestBody.name
+    },
+    {
+      email: requestBody.email,
+      name: requestBody.name,
+      password: requestBody.password
+    },
     requestBody
   ];
 
@@ -43,6 +52,7 @@ describe("register integration tests", () => {
   it("should return 201 when request is valid", async() => {
     const req = {
       email: requestBody.email,
+      name: requestBody.name,
       password: requestBody.password,
       confirmationPassword: requestBody.password
     };

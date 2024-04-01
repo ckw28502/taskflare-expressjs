@@ -5,6 +5,7 @@ const UserModel = require("../../../models/UserModel");
 const userData = require("../../data/test-user.json");
 const { generateRefreshToken } = require("../../../security/jwt");
 const log = require("../../../services/logService");
+const RefreshTokenResponse = require("../../../dto/responses/auths/refreshTokenResponse");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("refresh token integration test", () => {
@@ -46,11 +47,13 @@ describe("refresh token integration test", () => {
 
   it("should return 201 when request is valid", async() => {
     mockUserFindById(user);
+    const responseBody = new RefreshTokenResponse("token");
 
-    const response = await getRequest();
+    const response = await getRequest(responseBody);
 
     expect(log).toHaveBeenCalled();
 
     expect(response.status).toEqual(201);
+    expect(response.body).toEqual(responseBody);
   });
 });

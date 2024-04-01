@@ -5,6 +5,7 @@ const userData = require("../../data/test-user.json");
 const refreshToken = require("../../../services/auth/refreshTokenService");
 
 const { decodeRefreshToken, generateToken } = require("../../../security/jwt");
+const RefreshTokenResponse = require("../../../dto/responses/auths/refreshTokenResponse");
 jest.mock("../../../security/jwt", () => {
   return {
     decodeRefreshToken: jest.fn(),
@@ -63,6 +64,6 @@ describe("refresh token unit tests", () => {
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("TOKEN_REFRESHED");
     expect(response.user).toEqual(user);
-    expect(response).toHaveProperty("token");
+    expect(response.responseBody).toBeInstanceOf(RefreshTokenResponse);
   });
 });

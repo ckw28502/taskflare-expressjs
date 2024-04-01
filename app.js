@@ -11,12 +11,9 @@ const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/UserModel");
 
 const authRouter = require("./routes/authRoutes");
+const projectRouter = require("./routes/projectRoutes");
 
 const app = express();
-
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -28,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Apply the routes
 app.use("/", authRouter);
+app.use("/projects", projectRouter);
 
 // catch 404 and forward to error handler
 app.use(function(_err, req, res, next) {

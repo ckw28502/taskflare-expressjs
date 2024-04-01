@@ -1,3 +1,4 @@
+const LoginResponse = require("../../dto/responses/auths/loginResponse");
 const UserModel = require("../../models/UserModel");
 const { match } = require("../../security/bcyrpt");
 const { generateToken, generateRefreshToken } = require("../../security/jwt");
@@ -11,6 +12,7 @@ async function login(request) {
     };
   }
   if (!await match(request.getPassword(), user.password)) {
+    console.log(user);
     return {
       code: 400,
       message: "PASSWORD_INVALID",
@@ -18,11 +20,15 @@ async function login(request) {
     };
   }
 
+  const responseBody = new LoginResponse(
+    generateToken(user._id),
+    generateRefreshToken(user._id)
+  );
+
   return {
     code: 200,
-    token: generateToken(user._id),
-    refreshToken: generateRefreshToken(user._id),
     message: "LOGGED_IN",
+    responseBody,
     user
   };
 }

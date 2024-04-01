@@ -15,6 +15,7 @@ describe("register service unit tests", () => {
 
     request = new RegisterRequest({
       email: testUser.email,
+      name: testUser.name,
       password: testUser.password,
       confirmationPassword: testUser.password
     });
@@ -42,6 +43,7 @@ describe("register service unit tests", () => {
 
     const currentRequest = new RegisterRequest({
       email: request.getEmail(),
+      name: request.getName(),
       password: request.getPassword(),
       confirmationPassword: request.getPassword() + " "
     });

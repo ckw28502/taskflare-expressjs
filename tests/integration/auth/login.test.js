@@ -7,6 +7,7 @@ jest.mock("../../../services/auth/loginService");
 const log = require("../../../services/logService");
 const UserModel = require("../../../models/UserModel");
 const userData = require("../../data/test-user.json");
+const LoginResponse = require("../../../dto/responses/auths/loginResponse");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("login integration tests", () => {
@@ -43,8 +44,10 @@ describe("login integration tests", () => {
       code: 200,
       message: "LOGGED_IN",
       user: new UserModel(requestBody),
-      token: "token",
-      refreshToken: "refresh token"
+      responseBody: new LoginResponse(
+        "token",
+        "refreshToken"
+      )
     };
 
     login.mockResolvedValue(responseBody);
