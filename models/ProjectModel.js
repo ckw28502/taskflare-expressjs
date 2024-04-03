@@ -17,8 +17,8 @@ const ProjectSchema = Schema({
   },
   status: {
     type: String,
-    enum: ["PLANNED", "STARTED", "PAUSED", "LATE", "CANCELLED", "STOPPED", "FINISHED"],
-    default: "PLANNED"
+    enum: ["STARTED", "PAUSED", "LATE", "CANCELLED", "STOPPED", "FINISHED"],
+    default: "STARTED"
   }
 });
 

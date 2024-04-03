@@ -34,15 +34,17 @@ router.post("/", getCreateProjectRequestSchema(), validateToken, validateNotEmpt
   });
   const response = await createProject(request);
 
-  log(
-    response.user,
-    "CREATE_PROJECT",
-    response.code,
-    response.message,
-    "PROJECT, ROLE, POSITION"
-  );
-
-  res.status(response.code).json({ message: response.message });
+  if (response.message) {
+    log(
+      response.user,
+      "CREATE_PROJECT",
+      response.code,
+      response.message
+    );
+    res.status(response.code).json({ message: response.message });
+  } else {
+    res.status(response.code).send();
+  }
 });
 
 module.exports = router;

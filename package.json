@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "docker compose up -d db && nodemon bin/www",
-    "seed": "docker compose down -v db && docker compose up -d db && node seed/seed.js",
+    "seed": "docker compose down -v && docker compose up -d db && node seed/seed.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext js,jsx --fix",
     "prettier": "prettier --check .",

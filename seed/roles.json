@@ -1,0 +1,19 @@
+[
+    {
+        "project": "Project 1",
+        "name": "EMPLOYEE"
+    },
+    {
+        "project": "Project 1",
+        "name": "OWNER",
+        "managedRoles": [
+            "EMPLOYEE"
+        ],
+        "isDeletable": false
+    },
+    {
+        "project": "Project 2",
+        "name": "OWNER",
+        "isDeletable": false
+    }
+]

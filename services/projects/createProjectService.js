@@ -4,6 +4,7 @@ const ProjectModel = require("../../models/ProjectModel");
 const RoleModel = require("../../models/RoleModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
+const log = require("../logService");
 
 async function isTitleAvailability(userId, title) {
   const positions = await PositionModel.find({ user: userId }).populate("project");
@@ -50,10 +51,14 @@ async function createProject(request) {
     deadline: request.getDeadline()
   });
 
+  log(user, "CREATE_PROJECT", 201, "PROJECT_CREATED", "PROJECT");
+
   const role = await RoleModel.create({
     project: project._id,
-    name: "OWNER"
+    name: "OWNER",
+    isDeletetable: false
   });
+  log(user, "CREATE_ROLE", 201, "ROLE_CREATED", "ROLE");
 
   await PositionModel.create({
     user: user._id,
@@ -61,10 +66,11 @@ async function createProject(request) {
     role: role._id
   });
 
+  log(user, "CREATE_POSITION", 201, "POSITION_CREATED", "POSITION");
+
   return {
     user,
-    code: 201,
-    message: "PROJECT_CREATED"
+    code: 201
   };
 }
 

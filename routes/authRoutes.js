@@ -61,7 +61,11 @@ router.post("/register", getRegisterRequestSchema(), noTokenValidation, validate
     "USER"
   );
 
-  res.status(response.code).json({ message: response.message });
+  if (response.status === 201) {
+    res.status(response.code).send();
+  } else {
+    res.status(response.code).json({ message: response.message });
+  }
 });
 
 module.exports = router;

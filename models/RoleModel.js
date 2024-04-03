@@ -8,7 +8,7 @@ const RoleSchema = Schema({
     ref: "Project",
     required: true
   },
-  managedRole: [{
+  managedRoles: [{
     type: Schema.Types.ObjectId,
     ref: "Role"
   }],
