@@ -3,6 +3,7 @@ const PositionModel = require("../../models/PositionModel");
 const ProjectModel = require("../../models/ProjectModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
+const ProjectResponse = require("../../dto/responses/projects/projectResponse");
 
 async function createProject(request) {
   const payload = decodeToken(request.getToken());
@@ -42,7 +43,8 @@ async function createProject(request) {
   return {
     user,
     code: 201,
-    message: "PROJECT_CREATED"
+    message: "PROJECT_CREATED",
+    responseBody: new ProjectResponse(project)
   };
 }
 

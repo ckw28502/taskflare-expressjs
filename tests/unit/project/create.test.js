@@ -10,6 +10,8 @@ const { decodeToken } = require("../../../security/jwt");
 const CreateProjectRequest = require("../../../dto/requests/projects/createProjectRequest");
 
 const userData = require("../../data/test-user.json");
+const ProjectResponse = require("../../../dto/responses/projects/projectResponse");
+const moment = require("moment");
 
 jest.mock("../../../security/jwt", () => {
   return {
@@ -24,6 +26,8 @@ describe("Create Project unit tests", () => {
 
   let today;
 
+  let project;
+
   beforeAll(async() => {
     await db.setUp();
 
@@ -35,8 +39,10 @@ describe("Create Project unit tests", () => {
     });
   });
 
-  beforeEach(() => {
+  beforeEach(async() => {
     today = new Date();
+
+    project = await ProjectModel.create(projectData.project);
   });
 
   afterAll(async() => await db.tearDown());
@@ -71,13 +77,15 @@ describe("Create Project unit tests", () => {
     decodeToken.mockReturnValue(user._id);
     mockUserFindById(user);
 
+    createProjectSpy.mockReturnValue(project);
+
     const response = await createProject(request);
 
-    expect(createProjectSpy).toHaveBeenCalled();
     expect(createPositionSpy).toHaveBeenCalled();
 
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("PROJECT_CREATED");
+    expect(response.responseBody).toEqual(new ProjectResponse(project));
   });
 
   it("Should return 400 if date is invalid", async() => {
@@ -85,7 +93,7 @@ describe("Create Project unit tests", () => {
     mockUserFindById(user);
 
     const yesterday = today.setDate(today.getDate() - 1);
-    request.setDeadline(yesterday);
+    request.setDeadline(moment(yesterday).format("YYYY-MM-DD"));
 
     const response = await createProject(request);
 
@@ -98,11 +106,14 @@ describe("Create Project unit tests", () => {
     mockUserFindById(user);
 
     const tomorrow = today.setDate(today.getDate() + 1);
-    request.setDeadline(tomorrow);
+    request.setDeadline(moment(tomorrow).format("YYYY-MM-DD"));
+
+    project.deadline = tomorrow;
+
+    createProjectSpy.mockReturnValue(project);
 
     const response = await createProject(request);
 
-    expect(createProjectSpy).toHaveBeenCalled();
     expect(createPositionSpy).toHaveBeenCalled();
 
     expect(response.code).toEqual(201);

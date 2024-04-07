@@ -41,10 +41,10 @@ router.post("/", getCreateProjectRequestSchema(), validateToken, validateNotEmpt
     ["PROJECT", "POSITION"]
   );
 
-  if (response.message && response.code !== 201) {
-    res.status(response.code).json({ message: response.message });
+  if (response.code === 201) {
+    res.status(response.code).json({ project: response.responseBody.convertToObject() });
   } else {
-    res.status(response.code).send();
+    res.status(response.code).json({ message: response.message });
   }
 });
 

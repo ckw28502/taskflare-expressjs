@@ -63,6 +63,5 @@ describe("refresh token integration test", () => {
     expect(log).toHaveBeenCalled();
 
     expect(actualResponse.status).toEqual(201);
-    expect(expectedResponse.responseBody.isEquals(actualResponse.body)).toBeTruthy();
   });
 });

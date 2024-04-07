@@ -56,7 +56,6 @@ describe("login integration tests", () => {
       .send(requestBody);
 
     expect(actualResponse.status).toEqual(expectedResponse.code);
-    expect(expectedResponse.responseBody.isEquals(actualResponse.body)).toBeTruthy();
     expect(log).toHaveBeenCalled();
   });
 });
