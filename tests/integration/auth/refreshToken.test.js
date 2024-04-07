@@ -1,6 +1,9 @@
 const request = require("supertest");
 const app = require("../../../app");
 
+const refreshToken = require("../../../services/auth/refreshTokenService");
+jest.mock("../../../services/auth/refreshTokenService");
+
 const UserModel = require("../../../models/UserModel");
 const userData = require("../../data/test-user.json");
 const { generateRefreshToken } = require("../../../security/jwt");
@@ -47,13 +50,19 @@ describe("refresh token integration test", () => {
 
   it("should return 201 when request is valid", async() => {
     mockUserFindById(user);
-    const responseBody = new RefreshTokenResponse("token");
+    const expectedResponse = {
+      code: 201,
+      message: "TOKEN_REFRESHED",
+      responseBody: new RefreshTokenResponse("token"),
+      user
+    };
 
-    const response = await getRequest(responseBody);
+    refreshToken.mockResolvedValue(expectedResponse);
+    const actualResponse = await getRequest();
 
     expect(log).toHaveBeenCalled();
 
-    expect(response.status).toEqual(201);
-    expect(response.body).toEqual(responseBody);
+    expect(actualResponse.status).toEqual(201);
+    expect(expectedResponse.responseBody.isEquals(actualResponse.body)).toBeTruthy();
   });
 });

@@ -12,7 +12,6 @@ async function login(request) {
     };
   }
   if (!await match(request.getPassword(), user.password)) {
-    console.log(user);
     return {
       code: 400,
       message: "PASSWORD_INVALID",

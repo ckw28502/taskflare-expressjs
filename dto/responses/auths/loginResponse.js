@@ -16,6 +16,10 @@ class LoginResponse extends BaseResponse {
       refreshToken: this.#refreshToken
     };
   }
+
+  isEquals(actualResponse) {
+    return this.#token === actualResponse.token && this.#refreshToken === actualResponse.refreshToken;
+  }
 }
 
 module.exports = LoginResponse;

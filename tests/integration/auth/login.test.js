@@ -40,7 +40,7 @@ describe("login integration tests", () => {
   });
 
   it("should return 201 when request is valid", async() => {
-    const responseBody = {
+    const expectedResponse = {
       code: 200,
       message: "LOGGED_IN",
       user: new UserModel(requestBody),
@@ -50,16 +50,13 @@ describe("login integration tests", () => {
       )
     };
 
-    login.mockResolvedValue(responseBody);
-    const response = await request(app)
+    login.mockResolvedValue(expectedResponse);
+    const actualResponse = await request(app)
       .post("/login")
       .send(requestBody);
 
-    expect(response.status).toEqual(responseBody.code);
-    expect(response.body).toEqual({
-      token: responseBody.token,
-      refreshToken: responseBody.refreshToken
-    });
+    expect(actualResponse.status).toEqual(expectedResponse.code);
+    expect(expectedResponse.responseBody.isEquals(actualResponse.body)).toBeTruthy();
     expect(log).toHaveBeenCalled();
   });
 });

@@ -11,6 +11,10 @@ class RefreshTokenResponse extends BaseResponse {
   convertToObject() {
     return { token: this.#token };
   }
+
+  isEquals(actualResponse) {
+    return this.#token === actualResponse.token;
+  }
 }
 
 module.exports = RefreshTokenResponse;
