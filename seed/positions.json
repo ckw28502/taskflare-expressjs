@@ -1,17 +1,14 @@
 [
     {
         "project": "Project 1",
-        "user": "user1",
-        "role": "OWNER"
+        "user": "user1"
     },
     {
         "project": "Project 1",
-        "user": "user2",
-        "role": "EMPLOYEE"
+        "user": "user2"
     },
     {
         "project": "Project 2",
-        "user": "user2",
-        "role": "OWNER"
+        "user": "user2"
     }
 ]

@@ -23,6 +23,10 @@ class CreateProjectRequest extends JwtRequest {
   getDeadline() {
     return this.#deadline;
   }
+
+  setDeadline(deadline) {
+    this.#deadline = deadline;
+  }
 };
 
 module.exports = CreateProjectRequest;

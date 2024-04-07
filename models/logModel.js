@@ -8,10 +8,10 @@ const LogSchema = Schema({
     ref: "User",
     default: null
   },
-  schema: {
+  schema: [{
     type: String,
     default: null
-  },
+  }],
   action: {
     type: String,
     required: true

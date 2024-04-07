@@ -27,7 +27,7 @@ router.post("/login", getLoginRequestSchema(), noTokenValidation, validateNotEmp
     "LOGIN",
     response.code,
     response.message,
-    "USER"
+    ["USER"]
   );
 
   const responseBody = generateResponse(response);
@@ -58,7 +58,7 @@ router.post("/register", getRegisterRequestSchema(), noTokenValidation, validate
     "REGISTER",
     response.code,
     response.message,
-    "USER"
+    ["USER"]
   );
 
   if (response.status === 201) {

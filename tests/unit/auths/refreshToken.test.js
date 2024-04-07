@@ -23,7 +23,7 @@ describe("refresh token unit tests", () => {
 
     token = "refresh token";
 
-    user = new UserModel(userData.user);
+    user = await UserModel.create(userData.user);
   });
 
   afterAll(async() => {

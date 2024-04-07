@@ -13,20 +13,9 @@ const PositionSchema = Schema({
     ref: "Project",
     required: true
   },
-  role: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
   assignedTasks: [{
-    task: {
-      type: Schema.Types.ObjectId,
-      ref: "Task"
-    },
-    date: {
-      type: Date,
-      required: true
-    }
+    type: Schema.Types.ObjectId,
+    ref: "Task"
   }],
   isDeleted: {
     type: Date,

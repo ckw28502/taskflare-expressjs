@@ -33,14 +33,15 @@ router.post("/", getCreateProjectRequestSchema(), validateToken, validateNotEmpt
     ...req.body
   });
   const response = await createProject(request);
+  log(
+    response.user,
+    "CREATE_PROJECT",
+    response.code,
+    response.message,
+    ["PROJECT", "POSITION"]
+  );
 
-  if (response.message) {
-    log(
-      response.user,
-      "CREATE_PROJECT",
-      response.code,
-      response.message
-    );
+  if (response.message && response.code !== 201) {
     res.status(response.code).json({ message: response.message });
   } else {
     res.status(response.code).send();

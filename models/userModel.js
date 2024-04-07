@@ -16,11 +16,7 @@ const UserSchema = Schema({
   password: {
     type: String,
     required: true
-  },
-  positions: [{
-    type: Schema.Types.ObjectId,
-    ref: "Position"
-  }]
+  }
 });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
