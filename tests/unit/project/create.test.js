@@ -10,7 +10,6 @@ const { decodeToken } = require("../../../security/jwt");
 const CreateProjectRequest = require("../../../dto/requests/projects/createProjectRequest");
 
 const userData = require("../../data/test-user.json");
-const ProjectResponse = require("../../../dto/responses/projects/projectResponse");
 const moment = require("moment");
 
 jest.mock("../../../security/jwt", () => {
@@ -85,7 +84,7 @@ describe("Create Project unit tests", () => {
 
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("PROJECT_CREATED");
-    expect(response.responseBody).toEqual(new ProjectResponse(project));
+    expect(response.responseBody).toEqual(project._id);
   });
 
   it("Should return 400 if date is invalid", async() => {
@@ -118,5 +117,6 @@ describe("Create Project unit tests", () => {
 
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("PROJECT_CREATED");
+    expect(response.responseBody).toEqual(project._id);
   });
 });

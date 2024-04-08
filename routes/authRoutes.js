@@ -16,7 +16,7 @@ const refreshToken = require("../services/auth/refreshTokenService");
 const { noTokenValidation, validateRefreshToken } = require("../security/passport");
 const { validateNotEmpty, validateEmpty } = require("../security/express-validator/expressValidator");
 const { getToken } = require("../security/jwt");
-const generateResponse = require("../services/generateResponseService");
+const { generateResponse } = require("../services/generateResponseService");
 
 router.post("/login", getLoginRequestSchema(), noTokenValidation, validateNotEmpty, async(req, res) => {
   const request = new LoginRequest(req.body);

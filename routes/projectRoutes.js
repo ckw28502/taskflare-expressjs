@@ -4,7 +4,7 @@ const { validateEmpty, validateNotEmpty } = require("../security/express-validat
 const log = require("../services/logService");
 const getCreateProjectRequestSchema = require("../security/express-validator/request schemas/projects/createProjectRequestSchema");
 const { getToken } = require("../security/jwt");
-const generateResponse = require("../services/generateResponseService");
+const { generateResponses } = require("../services/generateResponseService");
 const CreateProjectRequest = require("../dto/requests/projects/createProjectRequest");
 const getAllProjects = require("../services/projects/getAllProjectsService");
 const createProject = require("../services/projects/createProjectService");
@@ -22,7 +22,7 @@ router.get("/", validateToken, validateEmpty, async(req, res) => {
     "PROJECT"
   );
 
-  const responseBody = generateResponse(response);
+  const responseBody = generateResponses(response);
   res.status(response.code).json(responseBody);
 });
 
@@ -42,7 +42,7 @@ router.post("/", getCreateProjectRequestSchema(), validateToken, validateNotEmpt
   );
 
   if (response.code === 201) {
-    res.status(response.code).json({ project: response.responseBody.convertToObject() });
+    res.status(response.code).json({ projectId: response.responseBody });
   } else {
     res.status(response.code).json({ message: response.message });
   }

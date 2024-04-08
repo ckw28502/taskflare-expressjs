@@ -13,7 +13,6 @@ const { generateToken } = require("../../../security/jwt");
 const moment = require("moment");
 
 const log = require("../../../services/logService");
-const ProjectResponse = require("../../../dto/responses/projects/projectResponse");
 const ProjectModel = require("../../../models/ProjectModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
@@ -79,11 +78,12 @@ describe("Create project integration tests", () => {
   it.each(requestBodies)("Should return 201 if request is valid!", async(mockRequestBody) => {
     mockUserFindById(user);
     const project = new ProjectModel(mockRequestBody);
+    console.log(project);
     createProject.mockReturnValue({
       user,
       code: 201,
       message: "PROJECT_CREATED",
-      responseBody: new ProjectResponse(project)
+      responseBody: project._id
     });
 
     const response = await getRequest(mockRequestBody);
