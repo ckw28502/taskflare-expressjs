@@ -118,5 +118,6 @@ describe("Create Project unit tests", () => {
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("PROJECT_CREATED");
     expect(response.responseBody).toEqual(project._id);
+    expect(response.user).toEqual(user);
   });
 });

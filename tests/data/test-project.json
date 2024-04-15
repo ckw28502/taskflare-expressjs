@@ -1,6 +1,16 @@
 {
-    "project":{
+    "project": {
         "title": "project",
         "description": "A project"
-    }
+    },
+    "projects": [
+        {
+            "title": "project1",
+            "description": "First project"
+        },
+        {
+            "title": "project2",
+            "description": "Second project"
+        }
+    ]
 }

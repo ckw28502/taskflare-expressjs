@@ -27,7 +27,8 @@ async function getAllProjects(token) {
   return {
     code: 200,
     message: "PROJECTS_RETRIEVED",
-    responseBody: responses
+    responseBody: responses,
+    user
   };
 }
 

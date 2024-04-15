@@ -78,7 +78,6 @@ describe("Create project integration tests", () => {
   it.each(requestBodies)("Should return 201 if request is valid!", async(mockRequestBody) => {
     mockUserFindById(user);
     const project = new ProjectModel(mockRequestBody);
-    console.log(project);
     createProject.mockReturnValue({
       user,
       code: 201,
