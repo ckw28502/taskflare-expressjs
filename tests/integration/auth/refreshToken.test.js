@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../../../app");
+const db = require("../../db");
 
 const refreshToken = require("../../../services/auth/refreshTokenService");
 jest.mock("../../../services/auth/refreshTokenService");
@@ -16,9 +17,14 @@ describe("refresh token integration test", () => {
   let token;
 
   beforeAll(async() => {
-    user = new UserModel(userData.user);
+    await db.setUp();
+    user = await UserModel.create(userData.user);
 
-    token = generateRefreshToken(user);
+    token = generateRefreshToken(user._id);
+  });
+
+  afterAll(async() => {
+    await db.tearDown();
   });
 
   async function getRequest(value) {
@@ -28,12 +34,8 @@ describe("refresh token integration test", () => {
       .send(value);
   }
 
-  function mockUserFindById(value) {
-    jest.spyOn(UserModel, "findById").mockResolvedValue(value);
-  }
-
   it("should return 401 if refresh token invalid", async() => {
-    mockUserFindById(null);
+    jest.spyOn(UserModel, "findById").mockResolvedValueOnce(undefined);
 
     const response = await getRequest();
 
@@ -41,15 +43,12 @@ describe("refresh token integration test", () => {
   });
 
   it("should return 400 if body is not empty", async() => {
-    mockUserFindById(user);
-
     const response = await getRequest({ token });
 
     expect(response.status).toEqual(400);
   });
 
   it("should return 201 when request is valid", async() => {
-    mockUserFindById(user);
     const expectedResponse = {
       code: 201,
       message: "TOKEN_REFRESHED",

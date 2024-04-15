@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../../../app");
+const db = require("../../db");
 
 const createProject = require("../../../services/projects/createProjectService");
 jest.mock("../../../services/projects/createProjectService");
@@ -24,9 +25,14 @@ describe("Create project integration tests", () => {
   const requestBody = projectData.project;
 
   beforeAll(async() => {
-    user = new UserModel(userData.user);
+    await db.setUp();
+    user = await UserModel.create(userData.user);
 
     token = generateToken(user._id);
+  });
+
+  afterAll(async() => {
+    await db.tearDown();
   });
 
   async function getRequest(value) {
@@ -36,12 +42,8 @@ describe("Create project integration tests", () => {
       .send(value);
   }
 
-  function mockUserFindById(value) {
-    jest.spyOn(UserModel, "findById").mockReturnValue(value);
-  }
-
   it("Should return 401 when token is invalid", async() => {
-    mockUserFindById(null);
+    jest.spyOn(UserModel, "findById").mockReturnValueOnce(undefined);
 
     const response = await getRequest();
 
@@ -60,8 +62,6 @@ describe("Create project integration tests", () => {
   ];
 
   it.each(invalidRequestBodies)("Should return 400 if request is invalid", async(mockRequestBody) => {
-    mockUserFindById(user);
-
     const response = await getRequest(mockRequestBody);
 
     expect(response.status).toEqual(400);
@@ -76,7 +76,6 @@ describe("Create project integration tests", () => {
   ];
 
   it.each(requestBodies)("Should return 201 if request is valid!", async(mockRequestBody) => {
-    mockUserFindById(user);
     const project = new ProjectModel(mockRequestBody);
     createProject.mockReturnValue({
       user,

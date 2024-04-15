@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../../../app");
+const db = require("../../db");
 
 const register = require("../../../services/auth/registerService");
 jest.mock("../../../services/auth/registerService");
@@ -12,6 +13,14 @@ const userData = require("../../data/test-user.json");
 
 describe("register integration tests", () => {
   const requestBody = userData.user;
+
+  beforeAll(async() => {
+    await db.setUp();
+  });
+
+  afterAll(async() => {
+    await db.tearDown();
+  });
 
   it("should return 403 if request has authorization token", async() => {
     const response = await request(app)
@@ -59,10 +68,7 @@ describe("register integration tests", () => {
     const responseBody = {
       code: 201,
       message: "USER_CREATED",
-      user: new UserModel({
-        email: req.email,
-        password: req.password
-      })
+      user: await UserModel.create(userData.user)
     };
 
     register.mockResolvedValue(responseBody);

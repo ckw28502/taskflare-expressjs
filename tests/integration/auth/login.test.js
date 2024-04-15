@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../../../app");
+const db = require("../../db");
 
 const login = require("../../../services/auth/loginService");
 jest.mock("../../../services/auth/loginService");
@@ -12,6 +13,14 @@ jest.mock("../../../services/logService", () => jest.fn());
 
 describe("login integration tests", () => {
   const requestBody = userData.user;
+
+  beforeAll(async() => {
+    await db.setUp();
+  });
+
+  afterAll(async() => {
+    await db.tearDown();
+  });
 
   it("should return 403 if request has authorization token", async() => {
     const response = await request(app)
@@ -43,7 +52,7 @@ describe("login integration tests", () => {
     const expectedResponse = {
       code: 200,
       message: "LOGGED_IN",
-      user: new UserModel(requestBody),
+      user: UserModel.create(requestBody),
       responseBody: new LoginResponse(
         "token",
         "refreshToken"
