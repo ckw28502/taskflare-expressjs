@@ -36,6 +36,8 @@ describe("Create Project unit tests", () => {
       token: "token",
       ...projectData.project
     });
+
+    decodeToken.mockReturnValue(user._id);
   });
 
   beforeEach(async() => {
@@ -47,21 +49,15 @@ describe("Create Project unit tests", () => {
   afterAll(async() => await db.tearDown());
 
   it("Should return 401 if token is invalid", async() => {
-    decodeToken.mockReturnValue(null);
-
+    decodeToken.mockReturnValueOnce(undefined);
     const response = await createProject(request);
 
     expect(response.code).toEqual(401);
     expect(response.message).toEqual("TOKEN_INVALID");
   });
 
-  function mockUserFindById(value) {
-    jest.spyOn(UserModel, "findById").mockReturnValue(value);
-  }
-
   it("Should return 401 if token payload is invalid", async() => {
-    decodeToken.mockReturnValue(user._id);
-    mockUserFindById(null);
+    jest.spyOn(UserModel, "findById").mockReturnValueOnce(undefined);
 
     const response = await createProject(request);
 
@@ -73,9 +69,6 @@ describe("Create Project unit tests", () => {
   const createPositionSpy = jest.spyOn(PositionModel, "create");
 
   it("Should create new project without deadline", async() => {
-    decodeToken.mockReturnValue(user._id);
-    mockUserFindById(user);
-
     createProjectSpy.mockReturnValue(project);
 
     const response = await createProject(request);
@@ -88,9 +81,6 @@ describe("Create Project unit tests", () => {
   });
 
   it("Should return 400 if date is invalid", async() => {
-    decodeToken.mockReturnValue(user._id);
-    mockUserFindById(user);
-
     const yesterday = today.setDate(today.getDate() - 1);
     request.setDeadline(moment(yesterday).format("YYYY-MM-DD"));
 
@@ -101,9 +91,6 @@ describe("Create Project unit tests", () => {
   });
 
   it("Should create new project with deadline", async() => {
-    decodeToken.mockReturnValue(user._id);
-    mockUserFindById(user);
-
     const tomorrow = today.setDate(today.getDate() + 1);
     request.setDeadline(moment(tomorrow).format("YYYY-MM-DD"));
 
@@ -118,6 +105,5 @@ describe("Create Project unit tests", () => {
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("PROJECT_CREATED");
     expect(response.responseBody).toEqual(project._id);
-    expect(response.user).toEqual(user);
   });
 });

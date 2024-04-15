@@ -25,11 +25,8 @@ describe("register service unit tests", () => {
     await db.tearDown();
   });
 
-  function mockUserExists(value) {
-    jest.spyOn(UserModel, "exists").mockReturnValue(value);
-  }
   it("should return 400 when email already registered!", async() => {
-    mockUserExists(true);
+    jest.spyOn(UserModel, "exists").mockReturnValueOnce(true);
     const response = await register(request);
 
     expect(response).toEqual({
@@ -39,8 +36,6 @@ describe("register service unit tests", () => {
   });
 
   it("should return 400 when password and confirmation password are different!", async() => {
-    mockUserExists(null);
-
     const currentRequest = new RegisterRequest({
       email: request.getEmail(),
       name: request.getName(),
@@ -57,8 +52,6 @@ describe("register service unit tests", () => {
   });
 
   it("should create new user object", async() => {
-    mockUserExists(null);
-
     const createUserSpy = jest.spyOn(UserModel, "create");
 
     await register(request);

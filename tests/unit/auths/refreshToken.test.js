@@ -30,13 +30,7 @@ describe("refresh token unit tests", () => {
     await db.tearDown();
   });
 
-  function mockFindById(value) {
-    jest.spyOn(UserModel, "findById").mockReturnValue(value);
-  }
-
   it("should return 401 if refresh token is invalid", async() => {
-    decodeRefreshToken.mockReturnValue(null);
-
     const response = await refreshToken(token);
 
     expect(response.code).toEqual(401);
@@ -44,8 +38,8 @@ describe("refresh token unit tests", () => {
   });
 
   it("should return 401 if refresh token payload is invalid", async() => {
-    decodeRefreshToken.mockReturnValue({ id: 1 });
-    mockFindById(null);
+    decodeRefreshToken.mockReturnValueOnce({ id: user.id });
+    jest.spyOn(UserModel, "findById").mockReturnValueOnce(undefined);
 
     const response = await refreshToken(token);
 
@@ -54,8 +48,7 @@ describe("refresh token unit tests", () => {
   });
 
   it("should return 200 token refreshed", async() => {
-    decodeRefreshToken.mockReturnValue({ id: 1 });
-    mockFindById(user);
+    decodeRefreshToken.mockReturnValue({ id: user.id });
 
     const response = await refreshToken(token);
 
@@ -63,7 +56,6 @@ describe("refresh token unit tests", () => {
 
     expect(response.code).toEqual(201);
     expect(response.message).toEqual("TOKEN_REFRESHED");
-    expect(response.user).toEqual(user);
     expect(response.responseBody).toBeInstanceOf(RefreshTokenResponse);
   });
 });

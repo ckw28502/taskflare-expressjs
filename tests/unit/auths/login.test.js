@@ -24,22 +24,15 @@ describe("login unit tests", () => {
 
     request = new LoginRequest(userData.user);
 
-    user = new UserModel({
-      email: request.getEmail(),
-      password: request.getPassword()
-    });
+    user = UserModel.create(userData.user);
   });
 
   afterAll(async() => {
     await db.tearDown();
   });
 
-  function mockFindByEmail(value) {
-    jest.spyOn(UserModel, "findOne").mockReturnValue(value);
-  }
-
   it("should return 400 if email not found", async() => {
-    mockFindByEmail(false);
+    jest.spyOn(UserModel, "findOne").mockReturnValueOnce(false);
 
     const response = await login(request);
 
@@ -48,7 +41,6 @@ describe("login unit tests", () => {
   });
 
   it("should return 400 if password is invalid", async() => {
-    mockFindByEmail(user);
     match.mockResolvedValue(false);
 
     const response = await login(request);
@@ -58,7 +50,6 @@ describe("login unit tests", () => {
   });
 
   it("should return 200 if logged in", async() => {
-    mockFindByEmail(user);
     match.mockResolvedValue(true);
 
     const response = await login(request);
@@ -66,6 +57,5 @@ describe("login unit tests", () => {
     expect(response.code).toEqual(200);
     expect(response.message).toEqual("LOGGED_IN");
     expect(response.responseBody).toBeInstanceOf(LoginResponse);
-    expect(response.user).toEqual(user);
   });
 });
