@@ -17,14 +17,12 @@ jest.mock("../../../security/bcyrpt", () => {
 
 describe("login unit tests", () => {
   let request;
-  let user;
-
   beforeAll(async() => {
     await db.setUp();
 
     request = new LoginRequest(userData.user);
 
-    user = UserModel.create(userData.user);
+    await UserModel.create(userData.user);
   });
 
   afterAll(async() => {
