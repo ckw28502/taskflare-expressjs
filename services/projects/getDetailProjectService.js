@@ -35,7 +35,7 @@ async function getDetailProject(request) {
 
   return {
     code: 200,
-    message: "PROJECTS_RETRIEVED",
+    message: "PROJECT_RETRIEVED",
     responseBody: new ProjectResponse(project),
     user
   };
