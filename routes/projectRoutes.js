@@ -4,10 +4,12 @@ const { validateEmpty, validateNotEmpty } = require("../security/express-validat
 const log = require("../services/logService");
 const getCreateProjectRequestSchema = require("../security/express-validator/request schemas/projects/createProjectRequestSchema");
 const { getToken } = require("../security/jwt");
-const { generateResponses } = require("../services/generateResponseService");
+const { generateResponse, generateResponses } = require("../services/generateResponseService");
 const CreateProjectRequest = require("../dto/requests/projects/createProjectRequest");
+const GetProjectDetailRequest = require("../dto/requests/projects/getProjectDetail");
 const getAllProjects = require("../services/projects/getAllProjectsService");
 const createProject = require("../services/projects/createProjectService");
+const getDetailProject = require("../services/projects/getDetailProjectService");
 const router = express.Router();
 
 router.get("/", validateToken, validateEmpty, async(req, res) => {
@@ -19,10 +21,27 @@ router.get("/", validateToken, validateEmpty, async(req, res) => {
     "GET_PROJECTS",
     response.code,
     response.message,
-    "PROJECT"
+    ["PROJECT"]
   );
 
   const responseBody = generateResponses(response);
+  res.status(response.code).json(responseBody);
+});
+
+router.get("/:projectId", validateToken, validateEmpty, async(req, res) => {
+  const request = new GetProjectDetailRequest(getToken(req), req.params.projectId);
+
+  const response = await getDetailProject(request);
+
+  log(
+    response.user,
+    "GET_PROJECT",
+    response.code,
+    response.message,
+    ["PROJECT"]
+  );
+
+  const responseBody = generateResponse(response);
   res.status(response.code).json(responseBody);
 });
 
