@@ -9,7 +9,10 @@ const CreateProjectRequest = require("../dto/requests/projects/createProjectRequ
 const GetProjectDetailRequest = require("../dto/requests/projects/getProjectDetail");
 const getAllProjects = require("../services/projects/getAllProjectsService");
 const createProject = require("../services/projects/createProjectService");
+const editProject = require("../services/projects/editProjectService");
 const getDetailProject = require("../services/projects/getDetailProjectService");
+const getEditProjectRequestSchema = require("../security/express-validator/request schemas/projects/getEditProjectRequestSchema");
+const EditProjectRequest = require("../dto/requests/projects/editProjectRequest");
 const router = express.Router();
 
 router.get("/", validateToken, validateEmpty, async(req, res) => {
@@ -62,6 +65,28 @@ router.post("/", getCreateProjectRequestSchema(), validateToken, validateNotEmpt
 
   if (response.code === 201) {
     res.status(response.code).json({ projectId: response.responseBody });
+  } else {
+    res.status(response.code).json({ message: response.message });
+  }
+});
+
+router.put("/", getEditProjectRequestSchema(), validateToken, validateNotEmpty, async(req, res) => {
+  const token = getToken(req);
+
+  const request = new EditProjectRequest({ token, ...req.body });
+
+  const response = await editProject(request);
+
+  log(
+    response.user,
+    "CREATE_PROJECT",
+    response.code,
+    response.message,
+    ["PROJECT"]
+  );
+
+  if (response.code === 204) {
+    res.status(response.code).send();
   } else {
     res.status(response.code).json({ message: response.message });
   }

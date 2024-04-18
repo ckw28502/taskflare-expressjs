@@ -7,15 +7,11 @@ const TaskSchema = Schema({
     ref: "Project",
     required: true
   },
-  assignee: {
+  position: {
     type: Schema.Types.ObjectId,
     ref: "Position",
     default: null
   },
-  allowedRoles: [{
-    type: Schema.Types.ObjectId,
-    ref: "Role"
-  }],
   title: {
     type: String,
     required: true
@@ -30,8 +26,8 @@ const TaskSchema = Schema({
   },
   status: {
     type: String,
-    enum: ["OPEN", "IN PROGRESS", "CLOSED", "FINISHED"],
-    default: "OPEN"
+    enum: ["CREATED", "IN PROGRESS", "FINISHED"],
+    default: "CREATED"
   }
 });
 

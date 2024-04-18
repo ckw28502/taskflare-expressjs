@@ -14,11 +14,6 @@ const ProjectSchema = Schema({
   deadline: {
     type: Date,
     default: null
-  },
-  status: {
-    type: String,
-    enum: ["STARTED", "PAUSED", "LATE", "CANCELLED", "STOPPED", "FINISHED"],
-    default: "STARTED"
   }
 });
 

@@ -13,10 +13,6 @@ const PositionSchema = Schema({
     ref: "Project",
     required: true
   },
-  assignedTasks: [{
-    type: Schema.Types.ObjectId,
-    ref: "Task"
-  }],
   isDeleted: {
     type: Date,
     default: null
