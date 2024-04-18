@@ -1,16 +1,16 @@
 const UserModel = require("../../../models/UserModel");
 const ProjectModel = require("../../../models/ProjectModel");
-const PositionModel = require("../../../models/PositionModel");
 const db = require("../db");
 const projectData = require("../../data/test-project.json");
 
-const createProject = require("../../../services/projects/createProjectService");
+const editProject = require("../../../services/projects/editProjectService");
 
 const { decodeToken } = require("../../../security/jwt");
-const CreateProjectRequest = require("../../../dto/requests/projects/createProjectRequest");
+const EditProjectRequest = require("../../../dto/requests/projects/editProjectRequest");
 
 const userData = require("../../data/test-user.json");
 const moment = require("moment");
+const PositionModel = require("../../../models/PositionModel");
 
 jest.mock("../../../security/jwt", () => {
   return {
@@ -18,25 +18,27 @@ jest.mock("../../../security/jwt", () => {
   };
 });
 
-describe("Create Project unit tests", () => {
+describe("Edit Project unit tests", () => {
   let request;
 
-  let user;
+  let project;
 
   let today;
-
-  let project;
 
   beforeAll(async() => {
     await db.setUp();
 
-    user = await UserModel.create(userData.user);
+    const user = await UserModel.create(userData.user);
 
     project = await ProjectModel.create(projectData.project);
 
-    request = new CreateProjectRequest({
+    await PositionModel.create({ user, project });
+
+    request = new EditProjectRequest({
       token: "token",
-      ...projectData.project
+      projectId: project._id,
+      title: "Modified Project",
+      description: "Project modified!"
     });
 
     decodeToken.mockReturnValue(user._id);
@@ -50,7 +52,7 @@ describe("Create Project unit tests", () => {
 
   it("Should return 401 if token is invalid", async() => {
     decodeToken.mockReturnValueOnce(undefined);
-    const response = await createProject(request);
+    const response = await editProject(request);
 
     expect(response.code).toEqual(401);
     expect(response.message).toEqual("TOKEN_INVALID");
@@ -59,51 +61,49 @@ describe("Create Project unit tests", () => {
   it("Should return 401 if token payload is invalid", async() => {
     jest.spyOn(UserModel, "findById").mockReturnValueOnce(undefined);
 
-    const response = await createProject(request);
+    const response = await editProject(request);
 
     expect(response.code).toEqual(401);
     expect(response.message).toEqual("TOKEN_PAYLOAD_INVALID");
   });
 
-  const createProjectSpy = jest.spyOn(ProjectModel, "create");
-  const createPositionSpy = jest.spyOn(PositionModel, "create");
+  it("Should return 400 if project not found", async() => {
+    jest.spyOn(ProjectModel, "findById").mockReturnValueOnce(undefined);
 
-  it("Should create new project without deadline", async() => {
-    createProjectSpy.mockReturnValue(project);
+    const response = await editProject(request);
 
-    const response = await createProject(request);
+    expect(response.code).toEqual(400);
+    expect(response.message).toEqual("PROJECT_NOT_FOUND");
+  });
 
-    expect(createPositionSpy).toHaveBeenCalled();
+  it("Should return 403 if position not found", async() => {
+    jest.spyOn(PositionModel, "findOne").mockReturnValueOnce(undefined);
 
-    expect(response.code).toEqual(201);
-    expect(response.message).toEqual("PROJECT_CREATED");
-    expect(response.responseBody).toEqual(project._id);
+    const response = await editProject(request);
+
+    expect(response.code).toEqual(403);
+    expect(response.message).toEqual("FORBIDDEN_ACCESS");
   });
 
   it("Should return 400 if date is invalid", async() => {
     const yesterday = today.setDate(today.getDate() - 1);
     request.setDeadline(moment(yesterday).format("YYYY-MM-DD"));
 
-    const response = await createProject(request);
+    const response = await editProject(request);
 
     expect(response.code).toEqual(400);
-    expect(response.message).toEqual("PROJECT_DEADLINE_INVALID");
+    expect(response.message).toEqual("DEADLINE_INVALID");
   });
 
-  it("Should create new project with deadline", async() => {
+  it("Should edit the project", async() => {
     const tomorrow = today.setDate(today.getDate() + 1);
     request.setDeadline(moment(tomorrow).format("YYYY-MM-DD"));
 
-    project.deadline = tomorrow;
+    const response = await editProject(request);
 
-    createProjectSpy.mockReturnValue(project);
+    expect(response.code).toEqual(204);
+    expect(response.message).toEqual("PROJECT_MODIFIED");
 
-    const response = await createProject(request);
-
-    expect(createPositionSpy).toHaveBeenCalled();
-
-    expect(response.code).toEqual(201);
-    expect(response.message).toEqual("PROJECT_CREATED");
-    expect(response.responseBody).toEqual(project._id);
+    expect(project).not.toEqual(await ProjectModel.findById(request.getProjectId()));
   });
 });

@@ -1,6 +1,8 @@
+const PositionModel = require("../../models/PositionModel");
 const ProjectModel = require("../../models/ProjectModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
+const moment = require("moment");
 
 async function editProject(request) {
   const payload = decodeToken(request.getToken());
@@ -27,6 +29,14 @@ async function editProject(request) {
     };
   }
 
+  const position = await PositionModel.findOne({ user, project });
+  if (!position) {
+    return {
+      code: 403,
+      message: "FORBIDDEN_ACCESS"
+    };
+  }
+
   const title = request.getTitle();
   if (title) {
     project.title = title;
@@ -39,6 +49,12 @@ async function editProject(request) {
 
   const deadline = request.getDeadline();
   if (deadline) {
+    if (!moment(deadline).isAfter(moment(), "day")) {
+      return {
+        code: 400,
+        message: "DEADLINE_INVALID"
+      };
+    }
     project.deadline = deadline;
   }
 
