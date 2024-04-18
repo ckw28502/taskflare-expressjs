@@ -1,6 +1,6 @@
 const JwtRequest = require("../jwtRequest");
 
-class CreateProjectRequest extends JwtRequest {
+class EditProjectRequest extends JwtRequest {
   #projectId;
   #title;
   #description;
@@ -35,4 +35,4 @@ class CreateProjectRequest extends JwtRequest {
   }
 };
 
-module.exports = CreateProjectRequest;
+module.exports = EditProjectRequest;

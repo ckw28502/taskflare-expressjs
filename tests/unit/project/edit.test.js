@@ -19,6 +19,8 @@ jest.mock("../../../security/jwt", () => {
 });
 
 describe("Edit Project unit tests", () => {
+  let token;
+
   let request;
 
   let project;
@@ -95,15 +97,32 @@ describe("Edit Project unit tests", () => {
     expect(response.message).toEqual("DEADLINE_INVALID");
   });
 
-  it("Should edit the project", async() => {
-    const tomorrow = today.setDate(today.getDate() + 1);
-    request.setDeadline(moment(tomorrow).format("YYYY-MM-DD"));
+  const requests = [
+    { title: "modified title" },
+    { description: "modified description" },
+    { deadline: true },
+    { title: "modified title", description: "modified description" },
+    { title: "modified title", deadline: true },
+    { description: "modified description", deadline: true },
+    request
+  ];
 
-    const response = await editProject(request);
+  it.each(requests)("Should edit the project", async(newData) => {
+    if (newData && newData.deadline) {
+      const tomorrow = today.setDate(today.getDate() + 1);
+      newData.deadline = moment(tomorrow).format("YYYY-MM-DD");
+    }
+    const newRequest = new EditProjectRequest({
+      token,
+      projectId: project._id,
+      ...newData
+    });
+
+    const response = await editProject(newRequest);
 
     expect(response.code).toEqual(204);
     expect(response.message).toEqual("PROJECT_MODIFIED");
 
-    expect(project).not.toEqual(await ProjectModel.findById(request.getProjectId()));
+    expect(project).not.toEqual(await ProjectModel.findById(newRequest.getProjectId()));
   });
 });
