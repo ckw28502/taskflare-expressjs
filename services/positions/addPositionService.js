@@ -28,8 +28,16 @@ async function addPosition(request) {
     };
   }
 
-  const userId = request.getUserId();
-  if (await PositionModel.findOne({ user: userId, project: request.getProjectId() })) {
+  const newUser = await UserModel.findOne({ email: request.getEmail() });
+  if (!newUser) {
+    return {
+      user,
+      code: 400,
+      message: "USER_NOT_FOUND"
+    };
+  }
+
+  if (await PositionModel.findOne({ user: newUser, project: request.getProjectId() })) {
     return {
       user,
       code: 400,
@@ -37,7 +45,7 @@ async function addPosition(request) {
     };
   }
 
-  await PositionModel.create({ user: userId, project: projectId });
+  await PositionModel.create({ user: newUser, project: projectId });
 
   return {
     user,

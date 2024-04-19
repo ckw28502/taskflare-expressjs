@@ -1,16 +1,16 @@
 const PositionRequest = require("./positionRequest");
 
 class AddPositionRequest extends PositionRequest {
-  #userId;
+  #email;
 
-  constructor({ token, projectId, userId }) {
+  constructor({ token, projectId, email }) {
     super(token, projectId);
 
-    this.#userId = userId;
+    this.#email = email;
   }
 
-  getUserId() {
-    return this.#userId;
+  getEmail() {
+    return this.#email;
   }
 }
 
