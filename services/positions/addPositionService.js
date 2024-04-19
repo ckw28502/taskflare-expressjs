@@ -1,4 +1,5 @@
 const PositionModel = require("../../models/PositionModel");
+const ProjectModel = require("../../models/ProjectModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
 
@@ -19,8 +20,16 @@ async function addPosition(request) {
     };
   }
 
-  const projectId = request.getProjectId();
-  if (!await PositionModel.findOne({ user, project: projectId })) {
+  const project = await ProjectModel.findById(request.getProjectId());
+  if (!project) {
+    return {
+      user,
+      code: 400,
+      message: "PROJECT_NOT_FOUND"
+    };
+  }
+
+  if (!await PositionModel.findOne({ user, project })) {
     return {
       user,
       code: 403,
@@ -37,7 +46,7 @@ async function addPosition(request) {
     };
   }
 
-  if (await PositionModel.findOne({ user: newUser, project: request.getProjectId() })) {
+  if (await PositionModel.findOne({ user: newUser, project })) {
     return {
       user,
       code: 400,
@@ -45,7 +54,7 @@ async function addPosition(request) {
     };
   }
 
-  await PositionModel.create({ user: newUser, project: projectId });
+  await PositionModel.create({ user: newUser, project });
 
   return {
     user,
