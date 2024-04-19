@@ -12,6 +12,7 @@ const User = require("./models/UserModel");
 
 const authRouter = require("./routes/authRoutes");
 const projectRouter = require("./routes/projectRoutes");
+const positionRouter = require("./routes/positionRoutes");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Apply the routes
 app.use("/", authRouter);
 app.use("/projects", projectRouter);
+app.use("/positions", positionRouter);
 
 // catch 404 and forward to error handler
 app.use(function(_err, req, res, next) {

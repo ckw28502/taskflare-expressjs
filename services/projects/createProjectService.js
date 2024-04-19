@@ -23,6 +23,7 @@ async function createProject(request) {
 
   if (request.getDeadline() && !moment(request.getDeadline()).isAfter(moment(), "day")) {
     return {
+      user,
       code: 400,
       message: "PROJECT_DEADLINE_INVALID"
     };

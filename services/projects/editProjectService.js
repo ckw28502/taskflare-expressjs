@@ -24,6 +24,7 @@ async function editProject(request) {
   const project = await ProjectModel.findById(request.getProjectId());
   if (!project) {
     return {
+      user,
       code: 400,
       message: "PROJECT_NOT_FOUND"
     };
@@ -32,6 +33,7 @@ async function editProject(request) {
   const position = await PositionModel.findOne({ user, project });
   if (!position) {
     return {
+      user,
       code: 403,
       message: "FORBIDDEN_ACCESS"
     };
@@ -51,6 +53,7 @@ async function editProject(request) {
   if (deadline) {
     if (!moment(deadline).isAfter(moment(), "day")) {
       return {
+        user,
         code: 400,
         message: "DEADLINE_INVALID"
       };

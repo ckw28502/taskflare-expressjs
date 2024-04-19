@@ -1,10 +1,8 @@
-const ProjectResponse = require("../../dto/responses/projects/projectResponse");
 const PositionModel = require("../../models/PositionModel");
-const ProjectModel = require("../../models/ProjectModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
 
-async function getDetailProject(request) {
+async function addPosition(request) {
   const payload = decodeToken(request.getToken());
   if (!payload) {
     return {
@@ -22,9 +20,7 @@ async function getDetailProject(request) {
   }
 
   const projectId = request.getProjectId();
-
-  const position = await PositionModel.findOne({ user: user._id, project: projectId });
-  if (!position) {
+  if (!await PositionModel.findOne({ user, project: projectId })) {
     return {
       user,
       code: 403,
@@ -32,14 +28,22 @@ async function getDetailProject(request) {
     };
   }
 
-  const project = await ProjectModel.findById(request.getProjectId());
+  const userId = request.getUserId();
+  if (await PositionModel.findOne({ user: userId, project: request.getProjectId() })) {
+    return {
+      user,
+      code: 400,
+      message: "USER_ALREADY_ASSIGNED"
+    };
+  }
+
+  await PositionModel.create({ user: userId, project: projectId });
 
   return {
-    code: 200,
-    message: "PROJECT_RETRIEVED",
-    responseBody: new ProjectResponse(project),
-    user
+    user,
+    message: "USER_ASSIGNED",
+    code: 201
   };
 }
 
-module.exports = getDetailProject;
+module.exports = addPosition;
