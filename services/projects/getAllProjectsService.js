@@ -1,4 +1,4 @@
-const ProjectResponse = require("../../dto/responses/projects/projectResponse");
+const ProjectResponse = require("../../dto/responses/projectResponse");
 const PositionModel = require("../../models/PositionModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");

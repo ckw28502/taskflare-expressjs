@@ -8,7 +8,7 @@ const getAllProjects = require("../../../services/projects/getAllProjectsService
 const { decodeToken } = require("../../../security/jwt");
 const PositionModel = require("../../../models/PositionModel");
 
-const ProjectResponse = require("../../../dto/responses/projects/projectResponse");
+const ProjectResponse = require("../../../dto/responses/projectResponse");
 jest.mock("../../../security/jwt", () => {
   return {
     decodeToken: jest.fn()

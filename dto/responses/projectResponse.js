@@ -1,4 +1,4 @@
-const IdResponse = require("../idResponse");
+const IdResponse = require("./idResponse");
 
 class ProjectResponse extends IdResponse {
   #title;

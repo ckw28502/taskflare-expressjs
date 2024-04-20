@@ -1,14 +1,11 @@
-class GetProjectDetailRequest {
-  #token;
+const JwtRequest = require("../jwtRequest");
+
+class GetProjectDetailRequest extends JwtRequest {
   #projectId;
 
   constructor(token, projectId) {
-    this.#token = token;
+    super(token);
     this.#projectId = projectId;
-  }
-
-  getToken() {
-    return this.#token;
   }
 
   getProjectId() {

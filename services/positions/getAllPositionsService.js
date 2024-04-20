@@ -1,10 +1,10 @@
-const ProjectResponse = require("../../dto/responses/projectResponse");
+const PositionResponse = require("../../dto/responses/positionResponse");
 const PositionModel = require("../../models/PositionModel");
 const ProjectModel = require("../../models/ProjectModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
 
-async function getDetailProject(request) {
+async function getAllPositions(request) {
   const payload = decodeToken(request.getToken());
   if (!payload) {
     return {
@@ -21,9 +21,16 @@ async function getDetailProject(request) {
     };
   }
 
-  const projectId = request.getProjectId();
+  const project = await ProjectModel.findById(request.getProjectId());
+  if (!project) {
+    return {
+      user,
+      code: 400,
+      message: "PROJECT_NOT_FOUND"
+    };
+  }
 
-  const position = await PositionModel.findOne({ user, project: projectId, isDeleted: null });
+  const position = await PositionModel.findOne({ user, project, isDeleted: null });
   if (!position) {
     return {
       user,
@@ -32,14 +39,15 @@ async function getDetailProject(request) {
     };
   }
 
-  const project = await ProjectModel.findById(request.getProjectId());
+  const positions = await PositionModel.find({ project, isDeleted: null }).populate("user");
+  const responseBody = positions.map(position => new PositionResponse(position._id, position.user.email));
 
   return {
+    user,
     code: 200,
-    message: "PROJECT_RETRIEVED",
-    responseBody: new ProjectResponse(project),
-    user
+    message: "",
+    responseBody
   };
 }
 
-module.exports = getDetailProject;
+module.exports = getAllPositions;

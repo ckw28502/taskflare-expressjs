@@ -7,7 +7,7 @@ const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
 const { generateToken } = require("../../../security/jwt");
 const ProjectModel = require("../../../models/ProjectModel");
-const ProjectResponse = require("../../../dto/responses/projects/projectResponse");
+const ProjectResponse = require("../../../dto/responses/projectResponse");
 const getDetailProject = require("../../../services/projects/getDetailProjectService");
 jest.mock("../../../services/projects/getDetailProjectService");
 const log = require("../../../services/logService");
