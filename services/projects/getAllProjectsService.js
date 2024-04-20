@@ -20,7 +20,7 @@ async function getAllProjects(token) {
     };
   }
 
-  const positions = await PositionModel.find({ user: user._id }).populate("project");
+  const positions = await PositionModel.find({ user: user._id, isDeleted: null }).populate("project");
 
   const responses = positions.map(position => new ProjectResponse(position.project));
 

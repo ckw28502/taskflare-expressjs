@@ -29,7 +29,7 @@ async function addPosition(request) {
     };
   }
 
-  if (!await PositionModel.findOne({ user, project })) {
+  if (!await PositionModel.findOne({ user, project, isDeleted: null })) {
     return {
       user,
       code: 403,
@@ -46,7 +46,7 @@ async function addPosition(request) {
     };
   }
 
-  if (await PositionModel.findOne({ user: newUser, project })) {
+  if (await PositionModel.findOne({ user: newUser, project, isDeleted: null })) {
     return {
       user,
       code: 400,

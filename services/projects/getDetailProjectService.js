@@ -23,7 +23,7 @@ async function getDetailProject(request) {
 
   const projectId = request.getProjectId();
 
-  const position = await PositionModel.findOne({ user: user._id, project: projectId });
+  const position = await PositionModel.findOne({ user, project: projectId, isDeleted: null });
   if (!position) {
     return {
       user,

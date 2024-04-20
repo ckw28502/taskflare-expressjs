@@ -2,9 +2,8 @@ const PositionModel = require("../../models/PositionModel");
 const ProjectModel = require("../../models/ProjectModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
-const moment = require("moment");
 
-async function editProject(request) {
+async function removePosition(request) {
   const payload = decodeToken(request.getToken());
   if (!payload) {
     return {
@@ -34,40 +33,19 @@ async function editProject(request) {
   if (!position) {
     return {
       user,
-      code: 403,
-      message: "FORBIDDEN_ACCESS"
+      code: 400,
+      message: "USER_NOT_ASSIGNED"
     };
   }
 
-  const title = request.getTitle();
-  if (title) {
-    project.title = title;
-  }
-
-  const description = request.getDescription();
-  if (description) {
-    project.description = description;
-  }
-
-  const deadline = request.getDeadline();
-  if (deadline) {
-    if (!moment(deadline).isAfter(moment(), "day")) {
-      return {
-        user,
-        code: 400,
-        message: "DEADLINE_INVALID"
-      };
-    }
-    project.deadline = deadline;
-  }
-
-  project.save();
+  position.isDeleted = new Date();
+  await position.save();
 
   return {
     user,
     code: 204,
-    message: "PROJECT_MODIFIED"
+    message: "USER_UNASSIGNED"
   };
 }
 
-module.exports = editProject;
+module.exports = removePosition;
