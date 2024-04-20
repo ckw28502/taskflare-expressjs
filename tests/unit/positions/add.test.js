@@ -101,7 +101,7 @@ describe("Add position unit tests", () => {
     expect(response.message).toEqual("USER_ALREADY_ASSIGNED");
   });
 
-  it("Should return 400 if user is assigned", async() => {
+  it("Should assign user", async() => {
     const createPositionSpy = jest.spyOn(PositionModel, "create");
 
     const response = await addPosition(request);
