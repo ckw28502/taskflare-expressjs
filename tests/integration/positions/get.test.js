@@ -7,29 +7,36 @@ const projectData = require("../../data/test-project.json");
 const UserModel = require("../../../models/UserModel");
 const ProjectModel = require("../../../models/ProjectModel");
 const { generateToken } = require("../../../security/jwt");
-const removePosition = require("../../../services/positions/removePositionService");
-jest.mock("../../../services/positions/removePositionService");
+const getAllPositions = require("../../../services/positions/getAllPositionsService");
+jest.mock("../../../services/positions/getAllPositionsService");
 const log = require("../../../services/logService");
 const PositionModel = require("../../../models/PositionModel");
+const PositionResponse = require("../../../dto/responses/positionResponse");
 jest.mock("../../../services/logService");
 
-describe("Remove position integration tests", () => {
-  let user;
+describe("Get all positions integration tests", () => {
+  let users;
 
   let project;
+
+  let positions;
 
   let token;
 
   beforeAll(async() => {
     await db.setUp();
 
-    user = await UserModel.create(userData.user);
+    users = await UserModel.insertMany(userData.users);
 
     project = await ProjectModel.create(projectData.project);
 
-    await PositionModel.create({ user, project });
+    const newPositions = users.map(user => {
+      return { user, project };
+    });
 
-    token = generateToken(user._id);
+    positions = await PositionModel.insertMany(newPositions);
+
+    token = generateToken(users[0]._id);
   });
 
   afterAll(async() => {
@@ -38,7 +45,7 @@ describe("Remove position integration tests", () => {
 
   async function getRequest(value) {
     return request(app)
-      .delete(`/positions/${project._id}`)
+      .get(`/positions/${project._id}`)
       .set("Authorization", `Bearer ${token}`)
       .send(value);
   }
@@ -57,11 +64,14 @@ describe("Remove position integration tests", () => {
     expect(response.status).toEqual(400);
   });
 
-  it("Should return 204 if request is valid!", async() => {
-    removePosition.mockReturnValue({
-      user,
+  it("Should return 200 if request is valid!", async() => {
+    const responseBody = positions.map(position => new PositionResponse(position._id, position.user.email));
+
+    getAllPositions.mockReturnValue({
+      user: users[0],
       code: 204,
-      message: "USER_UNASSIGNED"
+      message: "USER_UNASSIGNED",
+      responseBody
     });
 
     const response = await getRequest();
