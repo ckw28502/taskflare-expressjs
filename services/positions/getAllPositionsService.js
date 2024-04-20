@@ -45,7 +45,7 @@ async function getAllPositions(request) {
   return {
     user,
     code: 200,
-    message: "",
+    message: "POSITIONS_RETRIEVED",
     responseBody
   };
 }

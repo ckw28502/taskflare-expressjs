@@ -50,7 +50,6 @@ router.post("/", getAddPositionSchema(), validateToken, validateNotEmpty, async(
 
 router.delete("/:projectId", validateToken, validateEmpty, async(req, res) => {
   const request = new PositionRequest(getToken(req), req.params.projectId);
-  console.log(request.getToken());
   const response = await removePosition(request);
 
   log(
