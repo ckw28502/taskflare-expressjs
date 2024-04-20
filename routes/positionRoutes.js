@@ -14,10 +14,10 @@ router.post("/", getAddPositionSchema(), validateToken, validateNotEmpty, async(
 
   log(
     response.user,
-    "GET_PROJECT",
+    "CREATE_POSITION",
     response.code,
     response.message,
-    ["PROJECT"]
+    ["POSITION"]
   );
 
   if (response.code === 201) {
