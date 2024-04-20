@@ -7,14 +7,14 @@ const projectData = require("../../data/test-project.json");
 const UserModel = require("../../../models/UserModel");
 const ProjectModel = require("../../../models/ProjectModel");
 const { generateToken } = require("../../../security/jwt");
-const addPosition = require("../../../services/positions/addPositionService");
-jest.mock("../../../services/positions/addPositionService");
+const rempvePosition = require("../../../services/positions/removePositionService");
+jest.mock("../../../services/positions/removePositionService");
 const log = require("../../../services/logService");
 const PositionModel = require("../../../models/PositionModel");
 jest.mock("../../../services/logService");
 
-describe("Add position integration tests", () => {
-  let users;
+describe("Remove position integration tests", () => {
+  let user;
 
   let project;
 
@@ -23,13 +23,13 @@ describe("Add position integration tests", () => {
   beforeAll(async() => {
     await db.setUp();
 
-    users = await UserModel.insertMany(userData.users);
+    user = await UserModel.create(userData.user);
 
     project = await ProjectModel.create(projectData.project);
 
-    await PositionModel.create({ user: users[0], project });
+    await PositionModel.create({ user, project });
 
-    token = generateToken(users[0]._id);
+    token = generateToken(user._id);
   });
 
   afterAll(async() => {
@@ -38,7 +38,7 @@ describe("Add position integration tests", () => {
 
   async function getRequest(value) {
     return request(app)
-      .post("/positions")
+      .delete(`/positions/${project._id}`)
       .set("Authorization", `Bearer ${token}`)
       .send(value);
   }
@@ -51,36 +51,22 @@ describe("Add position integration tests", () => {
     expect(response.status).toEqual(401);
   });
 
-  const invalidRequestBodies = [
-    {},
-    {
-      project: "id"
-    },
-    {
-      project: "id",
-      email: "name"
-    }
-  ];
-
-  it.each(invalidRequestBodies)("Should return 400 if request is invalid", async(mockRequestBody) => {
-    const response = await getRequest(mockRequestBody);
+  it("Should return 400 if request is invalid", async() => {
+    const response = await getRequest("body");
 
     expect(response.status).toEqual(400);
   });
 
-  it("Should return 201 if request is valid!", async() => {
-    addPosition.mockReturnValue({
-      user: users[0],
-      code: 201,
-      message: "USER_ASSIGNED"
+  it("Should return 204 if request is valid!", async() => {
+    rempvePosition.mockReturnValue({
+      user,
+      code: 204,
+      message: "USER_UNASSIGNED"
     });
 
-    const response = await getRequest({
-      projectId: project._id,
-      email: users[1].email
-    });
+    const response = await getRequest();
 
     expect(log).toHaveBeenCalled();
-    expect(response.status).toEqual(201);
+    expect(response.status).toEqual(204);
   });
 });
