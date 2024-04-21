@@ -24,6 +24,10 @@ class CreateTaskRequest extends JwtRequest {
     return this.#positionId;
   }
 
+  setPositionId(positionId) {
+    this.#positionId = positionId;
+  }
+
   getTitle() {
     return this.#title;
   }
@@ -34,6 +38,10 @@ class CreateTaskRequest extends JwtRequest {
 
   getDeadline() {
     return this.#deadline;
+  }
+
+  setDeadline(deadline) {
+    this.#deadline = deadline;
   }
 }
 

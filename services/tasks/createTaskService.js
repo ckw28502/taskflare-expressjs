@@ -4,6 +4,7 @@ const UserModel = require("../../models/UserModel");
 const TaskModel = require("../../models/TaskModel");
 const { decodeToken } = require("../../security/jwt");
 const TaskResponse = require("../../dto/responses/taskResponse");
+const moment = require("moment");
 
 async function createTask(request) {
   const payload = decodeToken(request.getToken());
@@ -50,6 +51,14 @@ async function createTask(request) {
     }
   }
 
+  if (request.getDeadline() && !moment(request.getDeadline()).isAfter(moment(), "day")) {
+    return {
+      user,
+      code: 400,
+      message: "DEADLINE_INVALID"
+    };
+  }
+
   const task = await TaskModel.create({
     project,
     position,
@@ -57,8 +66,6 @@ async function createTask(request) {
     description: request.getDescription(),
     deadline: request.getDeadline()
   });
-
-  console.log(task);
 
   return {
     user,
