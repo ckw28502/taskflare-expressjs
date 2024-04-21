@@ -7,12 +7,14 @@ class TaskResponse extends IdResponse {
   #title;
   #description;
   #deadline;
+  #status;
 
   constructor(task) {
     super(task.id);
     this.#title = task.title;
     this.#description = task.description;
     this.#deadline = task.deadline;
+    this.#status = task.status;
     if (task.position) {
       const position = task.position;
       this.#assigneeId = position._id;
@@ -29,7 +31,8 @@ class TaskResponse extends IdResponse {
       deadline: this.#deadline,
       assigneeId: this.#assigneeId,
       assigneeEmail: this.#assigneeEmail,
-      assigneeName: this.#assigneeName
+      assigneeName: this.#assigneeName,
+      status: this.#status
     };
   }
 }

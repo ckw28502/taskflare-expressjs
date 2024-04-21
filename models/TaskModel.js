@@ -26,7 +26,7 @@ const TaskSchema = Schema({
   },
   status: {
     type: String,
-    enum: ["PLANNED", "IN PROGRESS", "FINISHED"],
+    enum: ["PLANNED", "IN_PROGRESS", "FINISHED"],
     default: "PLANNED"
   }
 });
