@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-function getRegisterRequestSchema(req) {
+function getRegisterRequestSchema() {
   return [
     body("email")
       .notEmpty().withMessage("EMAIL_REQUIRED")

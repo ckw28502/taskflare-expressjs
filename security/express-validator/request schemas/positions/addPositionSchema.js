@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-function getAddPositionSchema(req) {
+function getAddPositionSchema() {
   return [
     body("projectId").notEmpty().withMessage("PROJECT_ID_REQUIRED"),
     body("email")

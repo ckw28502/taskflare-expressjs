@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-function getLoginRequestSchema(req) {
+function getLoginRequestSchema() {
   return [
     body("email")
       .notEmpty().withMessage("EMAIL_REQUIRED")
