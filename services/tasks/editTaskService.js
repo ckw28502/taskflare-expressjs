@@ -1,3 +1,4 @@
+const TaskResponse = require("../../dto/responses/taskResponse");
 const PositionModel = require("../../models/PositionModel");
 const TaskModel = require("../../models/TaskModel");
 const UserModel = require("../../models/UserModel");
@@ -44,7 +45,7 @@ async function editTask(request) {
   }
 
   if (request.getPositionId()) {
-    const newPosition = await PositionModel.findById(request.getPositionId());
+    const newPosition = await PositionModel.findById(request.getPositionId()).populate("user");
     if (!newPosition) {
       return {
         user,
@@ -70,8 +71,9 @@ async function editTask(request) {
 
   return {
     user,
-    code: 204,
-    message: "TASK_MODIFIED"
+    code: 200,
+    message: "TASK_MODIFIED",
+    responseBody: new TaskResponse(task)
   };
 }
 

@@ -87,7 +87,7 @@ describe("Edit task unit tests", () => {
   it("Should edit task without new assignee", async() => {
     const response = await editTask(request);
 
-    expect(response.code).toEqual(204);
+    expect(response.code).toEqual(200);
     expect(response.message).toEqual("TASK_MODIFIED");
   });
 
@@ -105,7 +105,7 @@ describe("Edit task unit tests", () => {
 
     const response = await editTask(request);
 
-    expect(response.code).toEqual(204);
+    expect(response.code).toEqual(200);
     expect(response.message).toEqual("TASK_MODIFIED");
   });
 
@@ -125,7 +125,7 @@ describe("Edit task unit tests", () => {
 
     const response = await editTask(request);
 
-    expect(response.code).toEqual(204);
+    expect(response.code).toEqual(200);
     expect(response.message).toEqual("TASK_MODIFIED");
   });
 
@@ -137,7 +137,7 @@ describe("Edit task unit tests", () => {
 
     const response = await editTask(request);
 
-    expect(response.code).toEqual(204);
+    expect(response.code).toEqual(200);
     expect(response.message).toEqual("TASK_MODIFIED");
   });
 });

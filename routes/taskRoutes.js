@@ -65,11 +65,8 @@ router.put("/", getEditTaskRequestSchema(), validateToken, validateNotEmpty, asy
     ["TASK"]
   );
 
-  if (response.code === 204) {
-    res.status(response.code).send();
-  } else {
-    res.status(response.code).json({ message: response.message });
-  }
+  const responseBody = generateResponse(response);
+  res.status(response.code).json(responseBody);
 });
 
 module.exports = router;

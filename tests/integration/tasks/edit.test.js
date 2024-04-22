@@ -18,6 +18,7 @@ const log = require("../../../services/logService");
 const ProjectModel = require("../../../models/ProjectModel");
 const PositionModel = require("../../../models/PositionModel");
 const TaskModel = require("../../../models/TaskModel");
+const TaskResponse = require("../../../dto/responses/taskResponse");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("Edit task integration tests", () => {
@@ -93,7 +94,7 @@ describe("Edit task integration tests", () => {
     }
   ];
 
-  it.each(requestBodies)("Should return 204 if request is valid!", async(mockRequestBody) => {
+  it.each(requestBodies)("Should return 200 if request is valid!", async(mockRequestBody) => {
     mockRequestBody.id = task._id;
     if (mockRequestBody.positionId) {
       mockRequestBody.positionId = position._id;
@@ -101,13 +102,14 @@ describe("Edit task integration tests", () => {
 
     editTask.mockReturnValue({
       user,
-      code: 204,
-      message: "TASK_MODIFIED"
+      code: 200,
+      message: "TASK_MODIFIED",
+      responseBody: new TaskResponse(task)
     });
 
     const response = await getRequest(mockRequestBody);
 
-    expect(response.status).toEqual(204);
+    expect(response.status).toEqual(200);
     expect(log).toHaveBeenCalled();
   });
 });
