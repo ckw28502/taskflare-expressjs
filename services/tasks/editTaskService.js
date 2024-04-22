@@ -2,6 +2,7 @@ const PositionModel = require("../../models/PositionModel");
 const TaskModel = require("../../models/TaskModel");
 const UserModel = require("../../models/UserModel");
 const { decodeToken } = require("../../security/jwt");
+const moment = require("moment");
 
 async function editTask(request) {
   const payload = decodeToken(request.getToken());
@@ -54,10 +55,18 @@ async function editTask(request) {
     task.position = newPosition;
   }
 
+  if (request.getDeadline() && !moment(request.getDeadline()).isAfter(moment(), "day")) {
+    return {
+      user,
+      code: 400,
+      message: "DEADLINE_INVALID"
+    };
+  }
+
   task.title = request.getTitle();
   task.description = request.getDescription();
   task.deadline = request.getDeadline();
-  task.save();
+  await task.save();
 
   return {
     user,
