@@ -2,8 +2,8 @@ const request = require("supertest");
 const app = require("../../../app");
 const db = require("../../db");
 
-const createTask = require("../../../services/tasks/createTaskService");
-jest.mock("../../../services/tasks/createTaskService");
+const editTask = require("../../../services/tasks/editTaskService");
+jest.mock("../../../services/tasks/editTaskService");
 
 const UserModel = require("../../../models/UserModel");
 
@@ -18,23 +18,23 @@ const log = require("../../../services/logService");
 const ProjectModel = require("../../../models/ProjectModel");
 const PositionModel = require("../../../models/PositionModel");
 const TaskModel = require("../../../models/TaskModel");
-const TaskResponse = require("../../../dto/responses/taskResponse");
 jest.mock("../../../services/logService", () => jest.fn());
 
-describe("Create task integration tests", () => {
+describe("Edit task integration tests", () => {
   let token;
 
   let user;
-  let project;
   let position;
+  let task;
 
   const requestBody = taskData.task;
 
   beforeAll(async() => {
     await db.setUp();
     user = await UserModel.create(userData.user);
-    project = await ProjectModel.create(projectData.project);
+    const project = await ProjectModel.create(projectData.project);
     position = await PositionModel.create({ user, project });
+    task = await TaskModel.create({ project, ...taskData.task });
 
     token = generateToken(user._id);
   });
@@ -45,7 +45,7 @@ describe("Create task integration tests", () => {
 
   async function getRequest(value) {
     return request(app)
-      .post("/tasks")
+      .put("/tasks")
       .set("Authorization", `Bearer ${token}`)
       .send(value);
   }
@@ -70,7 +70,7 @@ describe("Create task integration tests", () => {
   ];
 
   it.each(invalidRequestBodies)("Should return 400 if request is invalid", async(mockRequestBody) => {
-    mockRequestBody.projectId = project._id;
+    mockRequestBody.id = task._id;
     const response = await getRequest(mockRequestBody);
 
     expect(response.status).toEqual(400);
@@ -93,27 +93,21 @@ describe("Create task integration tests", () => {
     }
   ];
 
-  it.each(requestBodies)("Should return 201 if request is valid!", async(mockRequestBody) => {
-    mockRequestBody.projectId = project._id;
+  it.each(requestBodies)("Should return 204 if request is valid!", async(mockRequestBody) => {
+    mockRequestBody.id = task._id;
     if (mockRequestBody.positionId) {
       mockRequestBody.positionId = position._id;
     }
-    const task = await TaskModel.create({
-      ...mockRequestBody,
-      project: mockRequestBody.projectId,
-      position: (mockRequestBody.positionId) ? position : null
-    });
 
-    createTask.mockReturnValue({
+    editTask.mockReturnValue({
       user,
-      code: 201,
-      message: "TASK_CREATED",
-      responseBody: new TaskResponse(task)
+      code: 204,
+      message: "TASK_MODIFIED"
     });
 
     const response = await getRequest(mockRequestBody);
 
-    expect(response.status).toEqual(201);
+    expect(response.status).toEqual(204);
     expect(log).toHaveBeenCalled();
   });
 });
