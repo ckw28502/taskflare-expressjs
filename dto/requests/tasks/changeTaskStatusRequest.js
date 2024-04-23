@@ -17,6 +17,10 @@ class ChangeTaskStatusRequest extends JwtRequest {
   getStatus() {
     return this.#status;
   }
+
+  setStatus(status) {
+    this.#status = status;
+  }
 }
 
 module.exports = ChangeTaskStatusRequest;
