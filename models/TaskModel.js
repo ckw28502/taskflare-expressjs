@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const taskEnum = require("./task-enum.json");
 
 const TaskSchema = Schema({
   project: {
@@ -26,7 +27,7 @@ const TaskSchema = Schema({
   },
   status: {
     type: String,
-    enum: ["PLANNED", "IN_PROGRESS", "FINISHED"],
+    enum: taskEnum,
     default: "PLANNED"
   }
 });

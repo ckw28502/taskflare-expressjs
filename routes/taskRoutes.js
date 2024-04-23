@@ -15,6 +15,9 @@ const EditTaskRequest = require("../dto/requests/tasks/editTaskRequest");
 const editTask = require("../services/tasks/editTaskService");
 const DeleteTaskRequest = require("../dto/requests/tasks/deleteTaskRequest");
 const deleteTask = require("../services/tasks/deleteTaskService");
+const getChangeTaskStatusSchema = require("../security/express-validator/request schemas/tasks/changeTaskStatusRequestSchema");
+const ChangeTaskStatusRequest = require("../dto/requests/tasks/changeTaskStatusRequest");
+const changeTaskStatus = require("../services/tasks/changeTaskStatusService");
 
 router.get("/:projectId", validateToken, validateEmpty, async(req, res) => {
   const request = new GetAllTasksRequest(getToken(req), req.params.projectId);
@@ -52,6 +55,26 @@ router.post("/", getCreateTaskRequestSchema(), validateToken, validateNotEmpty, 
 
   const responseBody = generateResponse(response);
   res.status(response.code).json(responseBody);
+});
+
+router.patch("/", getChangeTaskStatusSchema(), validateToken, validateNotEmpty, async(req, res) => {
+  const request = new ChangeTaskStatusRequest({ token: getToken(req), ...req.body });
+  console.log(request);
+  const response = await changeTaskStatus(request);
+
+  log(
+    response.user,
+    "EDIT_TASK",
+    response.code,
+    response.message,
+    ["TASK"]
+  );
+
+  if (response.code === 204) {
+    res.status(response.code).send();
+  } else {
+    res.status(response.code).json({ message: response.message });
+  }
 });
 
 router.put("/", getEditTaskRequestSchema(), validateToken, validateNotEmpty, async(req, res) => {
