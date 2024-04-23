@@ -13,6 +13,8 @@ const getAllTasks = require("../services/tasks/getAllTasksService");
 const getEditTaskRequestSchema = require("../security/express-validator/request schemas/tasks/editTaskRequestSchema");
 const EditTaskRequest = require("../dto/requests/tasks/editTaskRequest");
 const editTask = require("../services/tasks/editTaskService");
+const DeleteTaskRequest = require("../dto/requests/tasks/deleteTaskRequest");
+const deleteTask = require("../services/tasks/deleteTaskService");
 
 router.get("/:projectId", validateToken, validateEmpty, async(req, res) => {
   const request = new GetAllTasksRequest(getToken(req), req.params.projectId);
@@ -67,6 +69,26 @@ router.put("/", getEditTaskRequestSchema(), validateToken, validateNotEmpty, asy
 
   const responseBody = generateResponse(response);
   res.status(response.code).json(responseBody);
+});
+
+router.delete("/:id", validateToken, validateEmpty, async(req, res) => {
+  const request = new DeleteTaskRequest(getToken(req), req.params.id);
+
+  const response = await deleteTask(request);
+
+  log(
+    response.user,
+    "DELETE_TASK",
+    response.code,
+    response.message,
+    ["TASK"]
+  );
+
+  if (response.code === 204) {
+    res.status(response.code).send();
+  } else {
+    res.status(response.code).json({ message: response.message });
+  }
 });
 
 module.exports = router;
