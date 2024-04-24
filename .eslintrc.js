@@ -1,8 +1,11 @@
 module.exports = {
+  plugins: ["jest"],
   env: {
     browser: true,
     commonjs: true,
-    es2021: true
+    es2021: true,
+    "jest/globals": true
+
   },
   extends: "standard",
   overrides: [
@@ -10,7 +13,7 @@ module.exports = {
       env: {
         node: true
       },
-      files: [".js"],
+      files: [".eslintrc.{js,cjs}"],
       parserOptions: {
         sourceType: "script"
       }
@@ -21,6 +24,7 @@ module.exports = {
   },
   rules: {
     quotes: ["error", "double"],
-    semi: ["error", "always"]
+    semi: ["error", "always"],
+    "space-before-function-paren": ["error", "never"]
   }
 };

@@ -4,16 +4,25 @@ services:
   app:
     build: .
     ports:
-      - "443:443"
+      - "3000:3000"
     depends_on:
       - db
     env_file:
-      - .env
+      - .env.docker
+    networks:
+      - taskflare
 
   db:
     image: mongo:latest
+    networks:
+      - taskflare
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+
+networks:
+  taskflare:
+    name: taskflare
+    driver: bridge

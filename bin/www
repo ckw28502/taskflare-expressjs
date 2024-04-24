@@ -4,12 +4,9 @@
  * Module dependencies.
  */
 
-const { readFileSync } = require("fs");
 const app = require("../app");
 const debug = require("debug")("taskflare-expressjs:server");
-const https = require("https");
 const http = require("http");
-const path = require("path");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
@@ -18,48 +15,40 @@ const mongoose = require("mongoose");
  */
 
 dotenv.config();
-const port = normalizePort(process.env.PORT || "443");
-const protocol = process.env.PROTOCOL;
+const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
-const dbUrl = process.env.MONGODB_URI;
-
-/**
- * Connect to database
- */
-
-mongoose
-  .connect(dbUrl)
-  .then(() => console.log("Connection to database suceeded!"));
 
 /**
  * Create server.
  */
 
-let server;
+const server = http.createServer(app);
 
-if (protocol.toUpperCase() === "HTTPS") {
-  server = https.createServer(
-    {
-      key: readFileSync(path.join(__dirname, "../ssl/key.pem")),
-      cert: readFileSync(path.join(__dirname, "../ssl/cert.pem"))
-    },
-    app
-  );
-} else {
-  server = http.createServer(app);
+/**
+ * Connect to database
+ */
+
+mongoose.connect(process.env.MONGODB_URI, {
+  user: process.env.MONGODB_ROOT_USERNAME,
+  pass: process.env.MONGODB_ROOT_PASSWORD
+}).then(() => {
+  console.log("Connection to database suceeded!");
+  setupServer();
+}).catch(error => console.log("Error : " + error));
+
+/**
+* Listen on provided port, on all network interfaces.
+*/
+
+function setupServer() {
+  server.listen(port);
+  server.on("error", onError);
+  server.on("listening", onListening);
 }
 
 /**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
+* Normalize a port into a number, string, or false.
+*/
 
 function normalizePort(val) {
   const port = parseInt(val, 10);
@@ -111,11 +100,5 @@ function onListening() {
   const addr = server.address();
   const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
   debug("Listening on " + bind);
-  // Check protocol and port to log
-  const protocolName =
-    protocol.toUpperCase() === "HTTPS"
-      ? "https://localhost"
-      : `http://127.0.0.1:${port}`;
-
-  console.log(`Server is running on ${protocolName}`);
+  console.log("Server is running on http://localhost:3000");
 }

@@ -1,0 +1,13 @@
+[
+    {
+        "title": "Project 1",
+        "description": "First project!",
+        "status": "STARTED"
+    },
+    {
+        "title": "Project 2",
+        "description": "First project!",
+        "deadline": "2024-11-30",
+        "status": "CANCELLED"
+    }
+]

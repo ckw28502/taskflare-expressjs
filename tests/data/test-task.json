@@ -1,0 +1,16 @@
+{
+    "task": {
+        "title": "Task",
+        "description": "A task"
+    },
+    "tasks": [
+        {
+            "title": "Task 1",
+            "description": "First task"
+        },
+        {
+            "title": "Task 2",
+            "description": "Second task"
+        }
+    ]
+}
