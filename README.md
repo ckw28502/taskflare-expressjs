@@ -31,6 +31,7 @@ note: sometimes the test db server causing error. You can retry the test again
 
 # Running on docker
 You need to have docker installed and running on your machine
+It also needs to be able run docker compose
 ```
 docker compose up --detach
 ```
