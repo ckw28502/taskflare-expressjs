@@ -13,6 +13,11 @@ The database is running on docker so you don't need to install mongoDB on your l
 npm install
 ```
 
+# Prequisite steps
+- copy .env.examples and rename it into .env
+- change the mongodb uri to http://localhost:21017
+- fill the mongodb username and password
+
 # Seeding the database
 ```bash
 npm run seed
