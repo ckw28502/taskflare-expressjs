@@ -6,7 +6,7 @@ const register = require("../../../services/auth/registerService");
 jest.mock("../../../services/auth/registerService");
 
 const log = require("../../../services/logService");
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
 const userData = require("../../data/test-user.json");

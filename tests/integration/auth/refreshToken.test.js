@@ -5,7 +5,7 @@ const db = require("../../db");
 const refreshToken = require("../../../services/auth/refreshTokenService");
 jest.mock("../../../services/auth/refreshTokenService");
 
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 const userData = require("../../data/test-user.json");
 const { generateRefreshToken } = require("../../../security/jwt");
 const log = require("../../../services/logService");

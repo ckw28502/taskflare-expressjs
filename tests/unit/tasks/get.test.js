@@ -1,6 +1,6 @@
-const UserModel = require("../../../models/UserModel");
-const ProjectModel = require("../../../models/ProjectModel");
-const PositionModel = require("../../../models/PositionModel");
+const UserModel = require("../../../models/userModel");
+const ProjectModel = require("../../../models/projectModel");
+const PositionModel = require("../../../models/positionModel");
 const db = require("../db");
 const projectData = require("../../data/test-project.json");
 const taskData = require("../../data/test-task.json");
@@ -16,7 +16,7 @@ jest.mock("../../../security/jwt", () => {
 
 const userData = require("../../data/test-user.json");
 const GetAllTasksRequest = require("../../../dto/requests/tasks/getAllTasksRequest");
-const TaskModel = require("../../../models/TaskModel");
+const TaskModel = require("../../../models/taskModel");
 const TaskResponse = require("../../../dto/responses/taskResponse");
 
 describe("Get tasks unit tests", () => {

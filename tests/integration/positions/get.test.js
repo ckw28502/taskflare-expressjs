@@ -4,13 +4,13 @@ const db = require("../../db");
 
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
-const UserModel = require("../../../models/UserModel");
-const ProjectModel = require("../../../models/ProjectModel");
+const UserModel = require("../../../models/userModel");
+const ProjectModel = require("../../../models/projectModel");
 const { generateToken } = require("../../../security/jwt");
 const getAllPositions = require("../../../services/positions/getAllPositionsService");
 jest.mock("../../../services/positions/getAllPositionsService");
 const log = require("../../../services/logService");
-const PositionModel = require("../../../models/PositionModel");
+const PositionModel = require("../../../models/positionModel");
 const PositionResponse = require("../../../dto/responses/positionResponse");
 jest.mock("../../../services/logService");
 

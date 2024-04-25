@@ -2,9 +2,9 @@ const db = require("../db");
 
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
-const UserModel = require("../../../models/UserModel");
-const ProjectModel = require("../../../models/ProjectModel");
-const PositionModel = require("../../../models/PositionModel");
+const UserModel = require("../../../models/userModel");
+const ProjectModel = require("../../../models/projectModel");
+const PositionModel = require("../../../models/positionModel");
 const PositionRequest = require("../../../dto/requests/positions/positionRequest");
 const { decodeToken } = require("../../../security/jwt");
 const getAllPositions = require("../../../services/positions/getAllPositionsService");

@@ -1,5 +1,5 @@
 const db = require("../db");
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 
 const userData = require("../../data/test-user.json");
 

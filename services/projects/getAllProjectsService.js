@@ -1,6 +1,6 @@
 const ProjectResponse = require("../../dto/responses/projectResponse");
-const PositionModel = require("../../models/PositionModel");
-const UserModel = require("../../models/UserModel");
+const PositionModel = require("../../models/positionModel");
+const UserModel = require("../../models/userModel");
 const { decodeToken } = require("../../security/jwt");
 
 async function getAllProjects(token) {

@@ -5,7 +5,7 @@ const db = require("../../db");
 const createProject = require("../../../services/projects/createProjectService");
 jest.mock("../../../services/projects/createProjectService");
 
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
@@ -14,7 +14,7 @@ const { generateToken } = require("../../../security/jwt");
 const moment = require("moment");
 
 const log = require("../../../services/logService");
-const ProjectModel = require("../../../models/ProjectModel");
+const ProjectModel = require("../../../models/projectModel");
 jest.mock("../../../services/logService", () => jest.fn());
 
 describe("Create project integration tests", () => {

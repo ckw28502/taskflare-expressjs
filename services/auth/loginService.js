@@ -1,5 +1,5 @@
 const LoginResponse = require("../../dto/responses/auths/loginResponse");
-const UserModel = require("../../models/UserModel");
+const UserModel = require("../../models/userModel");
 const { match } = require("../../security/bcyrpt");
 const { generateToken, generateRefreshToken } = require("../../security/jwt");
 

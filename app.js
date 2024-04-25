@@ -8,7 +8,7 @@ const cors = require("cors");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
-const User = require("./models/UserModel");
+const User = require("./models/userModel");
 
 const authRouter = require("./routes/authRoutes");
 const projectRouter = require("./routes/projectRoutes");

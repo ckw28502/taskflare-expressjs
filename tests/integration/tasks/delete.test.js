@@ -5,17 +5,17 @@ const db = require("../../db");
 const deleteTask = require("../../../services/tasks/deleteTaskService");
 jest.mock("../../../services/tasks/deleteTaskService");
 
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
 const taskData = require("../../data/test-task.json");
 const { generateToken } = require("../../../security/jwt");
 
-const ProjectModel = require("../../../models/ProjectModel");
+const ProjectModel = require("../../../models/projectModel");
 
 const log = require("../../../services/logService");
-const TaskModel = require("../../../models/TaskModel");
+const TaskModel = require("../../../models/taskModel");
 const TaskResponse = require("../../../dto/responses/taskResponse");
 jest.mock("../../../services/logService", () => jest.fn());
 

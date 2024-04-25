@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const UserModel = require("../models/UserModel");
+const UserModel = require("../models/userModel");
 require("dotenv").config();
 
 const userData = require("./users.json");
@@ -7,10 +7,10 @@ const projectData = require("./projects.json");
 const positionData = require("./positions.json");
 const taskData = require("./tasks.json");
 const log = require("../services/logService");
-const ProjectModel = require("../models/ProjectModel");
+const ProjectModel = require("../models/projectModel");
 const { hash } = require("../security/bcyrpt");
-const PositionModel = require("../models/PositionModel");
-const TaskModel = require("../models/TaskModel");
+const PositionModel = require("../models/positionModel");
+const TaskModel = require("../models/taskModel");
 
 /**
  * Connect to database

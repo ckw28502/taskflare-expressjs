@@ -1,8 +1,8 @@
 const TaskResponse = require("../../dto/responses/taskResponse");
-const PositionModel = require("../../models/PositionModel");
-const ProjectModel = require("../../models/ProjectModel");
-const TaskModel = require("../../models/TaskModel");
-const UserModel = require("../../models/UserModel");
+const PositionModel = require("../../models/positionModel");
+const ProjectModel = require("../../models/projectModel");
+const TaskModel = require("../../models/taskModel");
+const UserModel = require("../../models/userModel");
 const { decodeToken } = require("../../security/jwt");
 
 async function getAllTasks(request) {

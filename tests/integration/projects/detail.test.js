@@ -1,12 +1,12 @@
 const request = require("supertest");
 const app = require("../../../app");
 const db = require("../../db");
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
 const { generateToken } = require("../../../security/jwt");
-const ProjectModel = require("../../../models/ProjectModel");
+const ProjectModel = require("../../../models/projectModel");
 const ProjectResponse = require("../../../dto/responses/projectResponse");
 const getDetailProject = require("../../../services/projects/getDetailProjectService");
 jest.mock("../../../services/projects/getDetailProjectService");

@@ -1,5 +1,5 @@
-const UserModel = require("../../../models/UserModel");
-const ProjectModel = require("../../../models/ProjectModel");
+const UserModel = require("../../../models/userModel");
+const ProjectModel = require("../../../models/projectModel");
 const db = require("../db");
 const projectData = require("../../data/test-project.json");
 
@@ -10,7 +10,7 @@ const EditProjectRequest = require("../../../dto/requests/projects/editProjectRe
 
 const userData = require("../../data/test-user.json");
 const moment = require("moment");
-const PositionModel = require("../../../models/PositionModel");
+const PositionModel = require("../../../models/positionModel");
 
 jest.mock("../../../security/jwt", () => {
   return {

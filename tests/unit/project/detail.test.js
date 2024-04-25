@@ -1,12 +1,12 @@
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 const db = require("../db");
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
-const ProjectModel = require("../../../models/ProjectModel");
+const ProjectModel = require("../../../models/projectModel");
 const getDetailProject = require("../../../services/projects/getDetailProjectService");
 
 const { decodeToken } = require("../../../security/jwt");
-const PositionModel = require("../../../models/PositionModel");
+const PositionModel = require("../../../models/positionModel");
 
 const ProjectResponse = require("../../../dto/responses/projectResponse");
 const GetProjectDetailRequest = require("../../../dto/requests/projects/getProjectDetail");

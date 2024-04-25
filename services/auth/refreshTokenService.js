@@ -1,5 +1,5 @@
 const RefreshTokenResponse = require("../../dto/responses/auths/refreshTokenResponse");
-const UserModel = require("../../models/UserModel");
+const UserModel = require("../../models/userModel");
 const { generateToken, decodeRefreshToken } = require("../../security/jwt");
 
 async function refreshToken(token) {

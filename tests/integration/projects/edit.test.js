@@ -5,7 +5,7 @@ const db = require("../../db");
 const editProject = require("../../../services/projects/editProjectService");
 jest.mock("../../../services/projects/editProjectService");
 
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");

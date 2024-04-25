@@ -1,4 +1,4 @@
-const LogModel = require("../models/LogModel");
+const LogModel = require("../models/logModel");
 
 async function log(user, action, status, detail, schema = null) {
   await LogModel.create({

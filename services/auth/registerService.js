@@ -1,4 +1,4 @@
-const UserModel = require("../../models/UserModel");
+const UserModel = require("../../models/userModel");
 
 const { hash } = require("../../security/bcyrpt");
 

@@ -1,7 +1,7 @@
-const PositionModel = require("../../models/PositionModel");
-const ProjectModel = require("../../models/ProjectModel");
-const UserModel = require("../../models/UserModel");
-const TaskModel = require("../../models/TaskModel");
+const PositionModel = require("../../models/positionModel");
+const ProjectModel = require("../../models/projectModel");
+const UserModel = require("../../models/userModel");
+const TaskModel = require("../../models/taskModel");
 const { decodeToken } = require("../../security/jwt");
 const TaskResponse = require("../../dto/responses/taskResponse");
 const moment = require("moment");

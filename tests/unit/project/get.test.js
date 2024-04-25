@@ -1,12 +1,12 @@
-const UserModel = require("../../../models/UserModel");
+const UserModel = require("../../../models/userModel");
 const db = require("../db");
 const userData = require("../../data/test-user.json");
 const projectData = require("../../data/test-project.json");
-const ProjectModel = require("../../../models/ProjectModel");
+const ProjectModel = require("../../../models/projectModel");
 const getAllProjects = require("../../../services/projects/getAllProjectsService");
 
 const { decodeToken } = require("../../../security/jwt");
-const PositionModel = require("../../../models/PositionModel");
+const PositionModel = require("../../../models/positionModel");
 
 const ProjectResponse = require("../../../dto/responses/projectResponse");
 jest.mock("../../../security/jwt", () => {

@@ -3,7 +3,7 @@ const { ExtractJwt, Strategy } = require("passport-jwt");
 
 require("dotenv").config();
 
-const UserModel = require("../models/UserModel");
+const UserModel = require("../models/userModel");
 
 function noTokenValidation(req, res, next) {
   if (req.headers.authorization) {

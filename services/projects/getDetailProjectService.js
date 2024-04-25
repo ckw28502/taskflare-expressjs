@@ -1,7 +1,7 @@
 const ProjectResponse = require("../../dto/responses/projectResponse");
-const PositionModel = require("../../models/PositionModel");
-const ProjectModel = require("../../models/ProjectModel");
-const UserModel = require("../../models/UserModel");
+const PositionModel = require("../../models/positionModel");
+const ProjectModel = require("../../models/projectModel");
+const UserModel = require("../../models/userModel");
 const { decodeToken } = require("../../security/jwt");
 
 async function getDetailProject(request) {
