@@ -14,9 +14,13 @@ npm install
 ```
 
 # Prequisite steps
-- copy .env.examples and rename it into .env
-- change the mongodb uri to http://localhost:21017
+- copy .env.examples and paste it as .env
+- fill the mongodb uri to URI to database (default is mongodb://localhost:27017)
 - fill the mongodb username and password
+- fill the jwt secret and jwt refresh secret
+- copy .env and paste it as .env.docker
+- replace the mongodb uri for .env.docker to URI to database ( default is mongodb://taskflare-expressjs-db-1:27017 )
+the reason .env and .env.docker path have different URI is the backend itself. for .env, we use the mapped port from docker to localhost since we use .env for local environment. For .env.docker, it will be used at docker environment so we use the direct URI to the db container since both are in the same network
 
 # Seeding the database
 ```bash
